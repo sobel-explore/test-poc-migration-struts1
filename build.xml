@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="version1.0" default="info" basedir=".">
+<project name="doctor-doc" default="info" basedir=".">
 
   <!-- Customisable properties -->
-  <property name="app.name" value="version1.0"/>
+  <property name="app.name" value="vdoctor-doc"/>
   <property name="version" value="0.1"/>
 
   <property name="deprecation" value="true"/>
@@ -90,16 +90,17 @@
     	   includeantruntime="false"
            source="1.6">
     </javac>
-    <copy todir="${classes.dir}">
-      <fileset dir="${resource.dir}">
-        <include name="**/*.properties"/>
-        <include name="**/*.xml"/>
-      </fileset>
-        <fileset dir="${src.dir}">
-         <include name="**/*.properties"/>
-        </fileset>
-    </copy>
-
+   <copy todir="${classes.dir}/resources">
+  <fileset dir="${resource.dir}">
+    <include name="**/*.properties"/>
+    <include name="**/*.xml"/>
+  </fileset>
+</copy>
+<copy todir="${classes.dir}">
+  <fileset dir="${src.dir}">
+    <include name="**/*.properties"/>
+  </fileset>
+</copy>
     <echo file="${version.file}" message="${version.string}"/>
   </target>
   

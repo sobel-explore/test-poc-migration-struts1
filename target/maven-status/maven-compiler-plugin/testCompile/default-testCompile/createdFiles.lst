@@ -1,0 +1,10 @@
+test\ConvertOpenUrlTest.class
+test\dbs\entity\TestBenutzer.class
+test\dbs\actions\user\TestLoginAction.class
+test\dbs\actions\user\TestKontoAction.class
+test\ddl\entity\TestPosition.class
+test\dbs\entity\TestKonto.class
+test\Order.class
+test\AllTests.class
+test\PrepareTestObjects.class
+test\CheckTest.class

@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /s /b:*)",
+      "Bash(mvn install:install-file:*)",
+      "Bash(mvn clean package:*)",
+      "Bash(dir:*)",
+      "Bash(set:*)",
+      "Bash(C:devtoolsjavajdk8u362-b09binjava -version)",
+      "Bash(export JAVA_HOME=/c/dev/tools/java/jdk8u362-b09:*)",
+      "Bash(export PATH=\"$JAVA_HOME/bin:$PATH\")",
+      "Bash(java -version:*)",
+      "Bash(export PATH=\"$JAVA_HOME/bin:/c/dev/tools/apache-maven-3.9.9/bin:$PATH\")",
+      "Bash(export PATH=\"$JAVA_HOME/bin:/c/dev/tools/maven/maven-3.9.11/bin:$PATH\")",
+      "Bash(/c/dev/tools/maven/maven-3.9.11/bin/mvn clean package:*)",
+      "Bash(mvn:*)",
+      "Bash(*:*)",
+      "Bash(cmd.exe /c \"C:\\\\dev\\\\tools\\\\maven\\\\maven-3.9.11\\\\bin\\\\mvn clean package\":*)",
+      "Bash(cmd.exe /c \"C:\\\\dev\\\\tools\\\\maven\\\\maven-3.9.11\\\\bin\\\\mvn.cmd clean package\")",
+      "Bash(cmd.exe /c \"set JAVA_HOME=C:\\\\dev\\\\tools\\\\java\\\\jdk8u362-b09 && C:\\\\dev\\\\tools\\\\maven\\\\maven-3.9.11\\\\bin\\\\mvn.cmd clean package\":*)",
+      "Bash(cmd //c:*)"
+    ]
+  }
+}

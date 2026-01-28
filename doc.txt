@@ -1,0 +1,63 @@
+
+
+docker run --name doctor-doc-mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:5.7
+
+docker exec -i doctor-doc-mysql mysql -uroot -proot -e "CREATE DATABASE doctordoc CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+docker exec -i doctor-doc-mysql mysql -uroot -proot doctordoc < db/master_dump.sql
+
+
+Configurer source/resources/SystemConfiguration.properties avec les paramètres MySQL :
+
+mysql.serveraddress=localhost
+mysql.databaseName=doctordoc
+mysql.user=root
+mysql.password=root
+
+
+Installation d'Apache Ant
+Télécharger depuis https://ant.apache.org/bindownload.cgi
+
+Version recommandée : Apache Ant 1.10.x (compatible Java 8)
+Fichier : apache-ant-1.10.14-bin.zip
+Extraire dans un répertoire, par exemple :
+
+C:\dev\tools\apache-ant-1.10.14
+
+Variables d'environnement à définir :
+
+set ANT_HOME=C:\dev\tools\apache-ant-1.10.14
+set JAVA_HOME=C:\dev\tools\java\jdk8u362-b09
+
+set PATH=%ANT_HOME%\bin;%JAVA_HOME%\bin;%PATH%
+
+set PATH=%JAVA_HOME%\bin;%PATH%
+
+Vérifier l'installation :
+
+ant -version
+ant clean war
+
+
+https://repo1.maven.org/maven2/org/apache/tomcat/tomcat/8.5.100/
+
+
+
+
+<copy todir="${classes.dir}/resources">
+  <fileset dir="${resource.dir}">
+    <include name="**/*.properties"/>
+    <include name="**/*.xml"/>
+  </fileset>
+</copy>
+<copy todir="${classes.dir}">
+  <fileset dir="${src.dir}">
+    <include name="**/*.properties"/>
+  </fileset>
+</copy>
+
+
+staff@doctor-doc.com / staff
+
+
+
+docker exec -i doctor-doc-mysql mysql -uroot -proot -e "SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));"
