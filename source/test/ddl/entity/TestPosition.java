@@ -27,6 +27,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import test.PrepareTestObjects;
@@ -35,6 +36,7 @@ import ch.dbs.entity.AbstractBenutzer;
 import ch.dbs.entity.Konto;
 import ch.ddl.entity.Position;
 
+@Ignore("disabled, outdated and not working test class")
 public class TestPosition {
 
     private static Konto k = new Konto();

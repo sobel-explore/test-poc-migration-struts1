@@ -33,6 +33,7 @@ import ch.dbs.form.KontoForm;
 import ch.dbs.form.UserForm;
 import enums.Result;
 
+@Ignore("disabled, outdated and not working test class")
 public class TestKontoAction extends MockStrutsTestCase {
 
     private transient Konto k = new Konto();

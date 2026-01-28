@@ -18,7 +18,13 @@
       "Bash(cmd.exe /c \"C:\\\\dev\\\\tools\\\\maven\\\\maven-3.9.11\\\\bin\\\\mvn clean package\":*)",
       "Bash(cmd.exe /c \"C:\\\\dev\\\\tools\\\\maven\\\\maven-3.9.11\\\\bin\\\\mvn.cmd clean package\")",
       "Bash(cmd.exe /c \"set JAVA_HOME=C:\\\\dev\\\\tools\\\\java\\\\jdk8u362-b09 && C:\\\\dev\\\\tools\\\\maven\\\\maven-3.9.11\\\\bin\\\\mvn.cmd clean package\":*)",
-      "Bash(cmd //c:*)"
+      "Bash(cmd //c:*)",
+      "Bash(where:*)",
+      "Bash(/c/dev/tools/maven/maven-3.9.11/bin/mvn.cmd clean compile)",
+      "Bash(/c/dev/tools/maven/maven-3.9.11/bin/mvn.cmd clean package:*)",
+      "Bash(unzip:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)"
     ]
   }
 }

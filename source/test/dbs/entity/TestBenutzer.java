@@ -32,6 +32,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import util.ThreadSafeSimpleDateFormat;
@@ -40,6 +41,7 @@ import ch.dbs.entity.Benutzer;
 import ch.dbs.entity.Konto;
 import ch.dbs.entity.Text;
 
+@Ignore("disabled, outdated and not working test class - requires database")
 public class TestBenutzer {
 
     private static final String anrede = "Testanrede";

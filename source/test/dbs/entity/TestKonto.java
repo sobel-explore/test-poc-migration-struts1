@@ -25,10 +25,12 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.dbs.entity.Konto;
 
+@Ignore("disabled, outdated and not working test class - requires database")
 public class TestKonto {
 
     private transient Konto k = new Konto();

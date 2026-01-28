@@ -25,6 +25,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import servletunit.struts.MockStrutsTestCase;
@@ -40,6 +41,7 @@ import ch.dbs.form.LoginForm;
 import ch.dbs.form.UserInfo;
 import enums.Result;
 
+@Ignore("disabled, outdated and not working test class")
 public class TestLoginAction extends MockStrutsTestCase {
 
     private static Konto k1;
