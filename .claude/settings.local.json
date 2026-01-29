@@ -39,7 +39,8 @@
       "Bash(powershell.exe -Command \"cd ''C:\\\\dev\\\\projects\\\\poc-migration-strut-spring\\\\doctor-doc-struts1''; mvn clean package -DskipTests\")",
       "Bash(powershell -Command \"mvn compile -q 2>&1 | Select-Object -First 50\")",
       "Bash(powershell -Command \"mvn clean package -DskipTests -q 2>&1 | Select-Object -Last 30\")",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "Bash(mvn.cmd:*)"
     ]
   }
 }

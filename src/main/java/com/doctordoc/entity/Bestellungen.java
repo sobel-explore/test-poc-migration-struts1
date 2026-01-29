@@ -378,6 +378,14 @@ public class Bestellungen implements Serializable {
         this.state = state;
     }
 
+    /**
+     * Returns the status text for display in templates.
+     * This is used by Thymeleaf for i18n status display.
+     */
+    public String getStatustext() {
+        return state != null ? state : "pending";
+    }
+
     public LocalDateTime getStatedate() {
         return statedate;
     }

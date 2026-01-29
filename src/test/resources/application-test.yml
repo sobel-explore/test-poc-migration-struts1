@@ -1,0 +1,36 @@
+# Test configuration for Doctor-Doc
+# Uses H2 in-memory database for testing
+
+spring:
+  # H2 Database Configuration (overrides MySQL from main config)
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  # JPA Configuration - Create tables automatically for tests
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+
+# Logging
+logging:
+  level:
+    org.springframework: WARN
+    com.doctordoc: DEBUG
+    org.hibernate.SQL: DEBUG
+
+# Doctor-Doc Application Properties
+doctordoc:
+  application-name: Doctor-Doc Test
+  gtc:
+    enabled: false
+  welcome-page: /login
