@@ -1,0 +1,324 @@
+body {
+  font-family: Verdana, Arial, Helvetica, SunSans-Regular, Sans-Serif;
+  font-size: 0.8em;
+  position: absolute;
+  background: #7FB2FF;
+}
+
+html,body {
+  top: 0;
+  left: 0;
+  right: 0;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+input {
+  /* font-family is needed for IE to render input and password fields with the same length */
+  font-family: Verdana, Arial, Helvetica, SunSans-Regular, Sans-Serif;
+  margin: 1px;
+}
+
+select, textarea {
+  padding: 1px;
+  margin: 1px;
+}
+
+a:link {
+  text-decoration:none;
+}
+a:visited {
+  color:blue;
+  text-decoration:none;
+}
+
+#header_table {
+  width: 100%;
+  text-align: left;
+  color: white;
+  padding-top: 4px;
+  padding-right: 2px;
+  padding-left: 2px;
+  padding-bottom: 0;
+  background: #0000B2;
+}
+
+table {
+  border-collapse: collapse;
+  border-width: 1px;
+  border-color: #404040;
+}
+
+table.submenu {
+  text-align: right;
+}
+
+th {
+  background: #E0E0E0;
+  border-color: black;
+  text-align: center;
+  padding: 1px;
+}
+
+td {
+  border-color: #404040;
+  border-width: 1px;
+  padding: 0px;
+}
+
+table.border {
+  border-collapse: collapse;
+  border-width: 1px;
+  margin-top: 0;
+  margin-bottom: 0;
+  text-indent: 0;
+  border-style: solid;
+  border-color: #404040;
+}
+
+#th-left {
+  text-align: left;
+  border-collapse: collapse;
+  border-width: 1px;
+  border-color: #404040;
+  border-style: solid;
+  padding: 1px;
+}
+
+#th-center {
+  text-align: center;
+  border-collapse: collapse;
+  border-width: 1px;
+  border-color: #404040;
+  border-style: solid;
+  padding: 1px;
+}
+
+#border {
+  border-collapse: collapse;
+  border-width: 1px;
+  border-color: #404040;
+  border-style: solid;
+  padding: 1px;
+}
+
+#tablestatsleft {
+  text-align: left;
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+  border: 1px solid gray;
+  background-color: #E0E0E0;
+  margin: 0px;
+}
+
+#tablestats {
+  text-align: center;
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+  border: 1px solid gray;
+  background-color: #E0E0E0;
+  margin: 0px;
+}
+
+td.logo {
+  width: 110px;
+}
+
+td.kontoinfos {
+  text-align: center;
+}
+
+h3 {
+  text-align: left;
+}
+
+p.miss {
+  font-weight: bold;
+  color: red;
+}
+
+div.content {
+  position: absolute;
+  text-align: left;
+  left: 110px;
+  right: 110px;
+}
+
+div.abstand {
+  position: absolute;
+  text-align: left;
+  left: 30px;
+}
+
+#header {
+  text-align: left;
+  color: white;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 2.5em;
+  background: #0000B2;
+  margin: 0;
+  padding-top: 1em;
+  padding-left: 6.2em;
+  z-index: 4;
+}
+
+img.logo {
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-top: 12px;
+  margin-bottom: 5px;
+  border: 0;
+  height: 87px;
+  width: 93px;
+}
+
+img.instlogo {
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-top: 12px;
+  margin-bottom: 5px;
+  border: 0;
+  max-height: 80px;
+  max-width: 300px;
+}
+
+img.whiteborder {
+border:1px solid #fff;
+}
+
+.centeredImage {
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding: 0px;
+}
+
+#tab {
+  vertical-align: text-bottom;
+  border: 0;
+}
+
+#content {
+  margin: 0;
+  padding-top: 7.5em;
+  padding-left: 12.5em;
+  padding-right: 3em;
+  padding-bottom: 5em;
+  z-index: 2;
+}
+
+#italic {
+  color: white;
+  font-style: italic;
+}
+
+#footer_container {
+  position: fixed;
+  bottom: 0;
+  left: 0em;
+  right: 0em;
+  text-align: left;
+  color: white;
+  margin: 0;
+  line-height: 2em;
+  height: 5.5em;
+  border-top: 4px solid #FFFFFF;
+  z-index: 3;
+}
+
+#footer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 0.5em;
+  padding-left: 12.5em;
+  background: #0000B2;
+  z-index: 3;
+}
+
+#menu a:link,#menu a:visited {
+  background-image:url(../../img/verlauf_menu_inactive.png);
+  background-repeat:repeat-y;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  padding-right:5px;
+  padding-bottom:5px;
+  padding-top:3px;
+  padding-left:5px;
+  display:block;
+}
+
+#menu a:hover,#menu a:active {
+  color: white;
+}
+
+#menuActive a:link, #menuActive a:visited {
+  background-image:url(../../img/verlauf_menu_active.png);
+  background-repeat:repeat-y;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  padding-right:5px;
+  padding-bottom:5px;
+  padding-top:3px;
+  padding-left:5px;
+  display:block;
+}
+
+#submenu a:link,#submenu a:visited {
+  display: block;
+  background: #e1d0d0;
+  color: gray;
+  text-decoration: none;
+  margin: 0;
+  padding: 0.2em;
+}
+
+#submenu a:hover {
+  background: #3887ff;
+  color: white;
+  text-decoration: none;
+}
+
+#submenuactive a:link,#submenuactive a:visited {
+  background: #3887ff;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 0.2em;
+}
+
+#status_container a:link,#status_container a:visited {
+  background: #0000B2;
+  color: white;
+  text-decoration: none;
+  margin: 0;
+  padding: 0.2em;
+}
+
+#status_container a:hover {
+  background: #0000B2;
+  color: black;
+  text-decoration: none;
+}
+
+#footer_container a:link,#footer_container a:visited {
+  background: #0000B2;
+  color: white;
+  text-decoration: none;
+  margin: 0;
+  padding: 0.2em;
+}
+
+#footer_container a:hover {
+  background: #0000B2;
+  color: black;
+  text-decoration: none;
+}

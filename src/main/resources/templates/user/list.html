@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{user.list.title})}">
+    <title>Users</title>
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<div class="content">
+    <br/>
+    <h3 th:text="#{user.list.title}">User Management</h3>
+
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <p>
+        <a th:href="@{/user/add}" th:text="#{user.add}">Add User</a>
+    </p>
+
+    <table class="border">
+        <tr>
+            <th id="th-center" th:text="#{user.name}">Name</th>
+            <th id="th-center" th:text="#{user.email}">Email</th>
+            <th id="th-center" th:text="#{user.institut}">Institution</th>
+            <th id="th-center" th:text="#{user.role}">Role</th>
+            <th id="th-center" th:text="#{user.status}">Status</th>
+            <th id="th-center" th:text="#{user.actions}">Actions</th>
+        </tr>
+        <tr th:each="u : ${users}">
+            <td id="border" th:text="${u.fullName}">Name</td>
+            <td id="border" th:text="${u.email}">email@example.com</td>
+            <td id="border" th:text="${u.institut}">Institution</td>
+            <td id="border" th:text="${u.roleName}">Role</td>
+            <td id="border">
+                <span th:if="${u.kontostatus}" style="color:green;" th:text="#{status.active}">Active</span>
+                <span th:unless="${u.kontostatus}" style="color:red;" th:text="#{status.inactive}">Inactive</span>
+            </td>
+            <td id="border">
+                <a th:href="@{/user/edit/{id}(id=${u.id})}">
+                    <img th:src="@{/img/edit.png}" th:alt="#{button.edit}" border="0"/>
+                </a>
+                &nbsp;
+                <a th:href="@{/user/delete/{id}(id=${u.id})}"
+                   onclick="return confirm('Are you sure?');">
+                    <img th:src="@{/img/drop.png}" th:alt="#{button.delete}" border="0"/>
+                </a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(users)}">
+            <td id="border" colspan="6" style="text-align:center; padding:20px;" th:text="#{user.list.empty}">
+                No users found
+            </td>
+        </tr>
+    </table>
+
+    <p></p>
+    <div th:replace="~{fragments/layout :: footer}"></div>
+</div>
+
+</body>
+</html>

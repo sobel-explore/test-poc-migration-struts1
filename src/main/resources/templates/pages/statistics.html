@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{stats.titel})}">
+    <title>Statistics</title>
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: messages}"></div>
+
+<div class="content">
+
+    <sec:authorize access="isAuthenticated()">
+
+        <br>
+
+        <h3 th:text="#{stats.header}">Statistics</h3>
+
+        <!-- Date Range Form -->
+        <form th:action="@{/statistics}" method="post">
+            <table>
+                <tr>
+                    <td align="center">
+                        <select name="dfrom">
+                            <option th:each="d : ${#numbers.sequence(1,31)}" th:value="${d}" th:text="${d}"
+                                    th:selected="${d == dfrom}">1</option>
+                        </select>
+                        <select name="mfrom">
+                            <option th:each="m : ${#numbers.sequence(1,12)}" th:value="${m}" th:text="${m}"
+                                    th:selected="${m == mfrom}">1</option>
+                        </select>
+                        <select name="yfrom">
+                            <option th:each="y : ${years}" th:value="${y}" th:text="${y}"
+                                    th:selected="${y == yfrom}">2024</option>
+                        </select>
+                        -
+                        <select name="dto">
+                            <option th:each="d : ${#numbers.sequence(1,31)}" th:value="${d}" th:text="${d}"
+                                    th:selected="${d == dto}">1</option>
+                        </select>
+                        <select name="mto">
+                            <option th:each="m : ${#numbers.sequence(1,12)}" th:value="${m}" th:text="${m}"
+                                    th:selected="${m == mto}">1</option>
+                        </select>
+                        <select name="yto">
+                            <option th:each="y : ${years}" th:value="${y}" th:text="${y}"
+                                    th:selected="${y == yto}">2024</option>
+                        </select>
+                        <button type="submit" th:text="#{stats.submit}">Submit</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <h4>
+            <span th:text="${konto?.bibliotheksname}">Library Name</span><br>
+            <span th:text="${dfrom + '-' + mfrom + '-' + yfrom + ' bis ' + dto + '-' + mto + '-' + yto}">Date range</span>
+        </h4>
+
+        * <span th:text="#{stats.comment1}">Comment 1</span><br>
+        ** <span th:text="#{stats.comment2}">Comment 2</span>
+
+        <p></p>
+
+        <!-- Total Orders -->
+        <table class="border">
+            <tr>
+                <th id="tablestatsleft" th:text="#{stats.konto}">Account</th>
+                <th id="tablestats" th:text="#{stats.total}">Total</th>
+            </tr>
+            <tr th:if="${totalOrders != null}">
+                <th id="tablestatsleft" th:text="#{stats.orders}">Orders</th>
+                <td id="tablestats" th:text="${totalOrders}">0</td>
+            </tr>
+        </table>
+
+        <br>
+
+        <!-- Supplier Statistics -->
+        <table class="border" th:if="${supplierStats != null}">
+            <tr>
+                <th id="tablestatsleft" th:text="#{stats.lieferant}">Supplier</th>
+                <th id="tablestats" th:text="#{stats.orders}">Orders</th>
+            </tr>
+            <tr th:each="stat : ${supplierStats}">
+                <th id="tablestatsleft" th:text="${stat.label != 'k.A.'} ? ${stat.label} : #{stats.notSpecified}">Supplier</th>
+                <td id="tablestats" th:text="${stat.count}">0</td>
+            </tr>
+        </table>
+
+        <br>
+
+        <!-- Media Type Statistics -->
+        <table class="border" th:if="${mediaTypeStats != null}">
+            <tr>
+                <th id="tablestatsleft" th:text="#{stats.medientyp}">Media Type</th>
+                <th id="tablestats" th:text="#{stats.total}">Total</th>
+            </tr>
+            <tr th:each="stat : ${mediaTypeStats}">
+                <th id="tablestatsleft">
+                    <span th:if="${stat.label == 'Artikel'}" th:text="#{save.artikel}">Article</span>
+                    <span th:if="${stat.label == 'Teilkopie Buch'}" th:text="#{save.bookpart}">Book Part</span>
+                    <span th:if="${stat.label == 'Buch'}" th:text="#{save.book}">Book</span>
+                    <span th:if="${stat.label != 'Artikel' and stat.label != 'Teilkopie Buch' and stat.label != 'Buch'}"
+                          th:text="${stat.label}">Other</span>
+                </th>
+                <td id="tablestats" th:text="${stat.count}">0</td>
+            </tr>
+        </table>
+
+        <br>
+
+        <!-- Status Statistics -->
+        <table class="border" th:if="${statusStats != null}">
+            <tr>
+                <th id="tablestatsleft" th:text="#{stats.status}">Status</th>
+                <th id="tablestats" th:text="#{stats.total}">Total</th>
+            </tr>
+            <tr th:each="stat : ${statusStats}">
+                <th id="tablestatsleft" th:text="${stat.label}">Status</th>
+                <td id="tablestats" th:text="${stat.count}">0</td>
+            </tr>
+        </table>
+
+        <br>
+
+        <p th:text="#{stats.comment3}">Additional info</p>
+
+    </sec:authorize>
+
+    <sec:authorize access="!isAuthenticated()">
+        <p th:text="#{error.kontos}">No access</p>
+    </sec:authorize>
+
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+</html>

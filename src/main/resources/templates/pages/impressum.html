@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{impressum.header})}">
+    <title>Impressum</title>
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: messages}"></div>
+
+<div class="content">
+
+    <br>
+    <h3 th:text="#{impressum.titel}">About Us</h3>
+
+    <table width="800">
+        <tr>
+            <td><b>Open Source</b></td>
+        </tr>
+        <tr>
+            <td th:text="#{anmeldungtyp.kosten(${@doctorDocProperties.applicationName})}">Open source info</td>
+        </tr>
+        <tr><td><br></td></tr>
+        <tr>
+            <td><b>Hosting</b></td>
+        </tr>
+        <tr>
+            <td>
+                <span th:text="#{impressum.service(${@doctorDocProperties.applicationName})}">Hosting service</span>
+                <span th:text="#{impressum.programmierung}">Programming</span>
+            </td>
+        </tr>
+        <tr><td><br></td></tr>
+        <tr>
+            <td><b th:text="#{impressum.contact}">Contact</b></td>
+        </tr>
+        <tr>
+            <td th:text="#{impressum.entwicklung(${@doctorDocProperties.applicationName})}">Development</td>
+        </tr>
+        <tr><td><br></td></tr>
+        <tr>
+            <td>
+                <a href="https://lists.sourceforge.net/lists/listinfo/doctor-doc-general" target="_blank">
+                    https://lists.sourceforge.net/lists/listinfo/doctor-doc-general
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="https://lists.sourceforge.net/lists/listinfo/doctor-doc-tech" target="_blank">
+                    https://lists.sourceforge.net/lists/listinfo/doctor-doc-tech
+                </a>
+            </td>
+        </tr>
+        <tr><td><br></td></tr>
+        <tr>
+            <td><b th:text="#{impressum.presse}">Press</b></td>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li><a href="http://prezi.com/naimoi1tak3j/doctor-doc-amb/" target="_blank">Prezi</a></li>
+                    <li><a href="http://www.gbv.de/wikis/cls/Doctor-Doc-GBV-Schnittstelle" target="_blank">GBV-Wiki</a></li>
+                    <li><a href="http://www.egms.de/static/de/journals/mbi/2010-10/mbi000189.shtml" target="_blank">GMS - German Medical Science: AGMB Meeting 2009</a></li>
+                    <li><a href="https://sourceforge.net/apps/mediawiki/doctor-doc/index.php?title=Main_Page" target="_blank">Wiki Doctor-Doc</a></li>
+                    <li><a href="https://sourceforge.net/apps/mediawiki/doctor-doc/index.php?title=Help:Contents" target="_blank">Help Pages</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><b th:text="#{impressum.newsletter}">Newsletter</b></td>
+        </tr>
+        <tr>
+            <td>
+                <ul>
+                    <li><a href="http://sourceforge.net/mailarchive/forum.php?forum_name=doctor-doc-general" target="_blank">News</a></li>
+                    <li><a href="http://www.doctor-doc.com/Newsletter6.pdf">Newsletter 6</a> (26-Mai-2010)</li>
+                    <li><a href="http://www.doctor-doc.com/Newsletter5.pdf">Newsletter 5</a> (04-Jan-2010)</li>
+                    <li><a href="http://www.doctor-doc.com/Newsletter4.pdf">Newsletter 4</a> (24-Aug-2009)</li>
+                    <li><a href="http://www.doctor-doc.com/Newsletter3.pdf">Newsletter 3</a> (11-Jun-2009)</li>
+                    <li><a href="http://www.doctor-doc.com/Newsletter2.pdf">Newsletter 2</a> (13-Apr-2009)</li>
+                    <li><a href="http://www.doctor-doc.com/Newsletter.pdf">Newsletter 1</a> (08-<span th:text="#{impressum.march}">March</span>-2009)</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+</html>

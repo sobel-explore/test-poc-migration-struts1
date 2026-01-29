@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(#{login.message})}">
+    <title>Login</title>
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<div class="content">
+    <br/>
+    <h3 th:text="#{login.message} + ':'">Login:</h3>
+
+    <div th:if="${param.error}" style="color:red;">
+        <p th:text="#{error.username_pw}">Invalid email or password</p>
+    </div>
+    <div th:if="${param.logout}" style="color:green;">
+        <p th:text="#{login.logged_out}">You have been logged out</p>
+    </div>
+
+    <table>
+        <form th:action="@{/logincheck}" method="post">
+            <tr>
+                <td><p>&nbsp;</p></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><label for="email_login" th:text="#{login.email}">Email</label></td>
+                <td>
+                    <input id="email_login" name="email" type="email" required="required" size="50" maxlength="50"/>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="password" th:text="#{login.password}">Password</label></td>
+                <td>
+                    <input id="password" name="password" type="password" required="required" size="50" maxlength="50"/>
+                    <p></p>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" th:value="#{button.login}" value="Login"/>
+                </td>
+            </tr>
+
+            <tr><td colspan="2"><br/></td></tr>
+            <tr><td colspan="2"><br/></td></tr>
+            <tr><td colspan="2"><br/></td></tr>
+            <tr><td colspan="2"><br/></td></tr>
+            <tr><td colspan="2"><br/></td></tr>
+            <tr><td colspan="2"><br/></td></tr>
+            <tr><td colspan="2"><br/></td></tr>
+            <tr><td colspan="2"><br/></td></tr>
+            <tr><td colspan="2"><br/></td></tr>
+            <tr><td colspan="2"><br/></td></tr>
+            <tr><td colspan="2"><br/></td></tr>
+            <tr><td colspan="2"><br/></td></tr>
+        </form>
+
+        <form th:action="@{/pwreset}" method="post">
+            <tr>
+                <td colspan="2">
+                    <span th:text="#{login.vergessen}">Forgot password?</span>
+                    <label for="email_resend" th:text="#{login.email}">Email</label>&nbsp;
+                    <input type="email" id="email_resend" name="email" required="required" size="39" maxlength="50"/>
+                    <input type="submit" th:value="#{login.submitpwrt}" value="Reset"/>
+                </td>
+            </tr>
+        </form>
+    </table>
+
+    <p><br/></p>
+    <p><br/></p>
+    <p><br/></p>
+    <p><br/></p>
+
+    <div th:replace="~{fragments/layout :: footer}"></div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Head Fragment -->
+<head th:fragment="head(title)">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title th:text="${@doctorDocProperties.applicationName} + ' - ' + ${title}">Doctor-Doc</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}"/>
+</head>
+
+<!-- Header Fragment -->
+<div th:fragment="header">
+    <table id="header_table">
+        <tr style="background-image:url(/doctor-doc/img/verlauf.png); background-repeat:repeat-x;">
+            <td class="logo">
+                <a th:href="@{/}">
+                    <img class="logo" th:src="@{/img/sp.gif}" th:alt="${@doctorDocProperties.applicationName}"/>
+                </a>
+            </td>
+            <td>
+                <h1 th:text="${@doctorDocProperties.applicationName}">Doctor-Doc</h1>
+            </td>
+            <td class="kontoinfos" th:if="${konto != null}">
+                <span style="color:white;" th:text="${konto.bibliotheksname}">Library Name</span>
+            </td>
+            <td width="20%" style="text-align:right;">
+                <sec:authorize access="isAuthenticated()">
+                    <a th:href="@{/logout}" style="color:white;">[Log out]</a>
+                </sec:authorize>
+                <sec:authorize access="!isAuthenticated()">
+                    <a th:href="@{/login}" style="color:white;">[Login]</a>
+                </sec:authorize>
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td colspan="3">
+                <div th:replace="~{fragments/layout :: tabmenu}"></div>
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+</div>
+
+<!-- Tab Menu Fragment -->
+<div th:fragment="tabmenu">
+    <table width="100%">
+        <tr>
+            <td align="left">
+                <div id="menu">
+                    <!-- Menu for non-authenticated users -->
+                    <sec:authorize access="!isAuthenticated()">
+                        <table style="width:1120px;">
+                            <tr>
+                                <td width="12.5%" th:id="${activeMenu == 'login'} ? 'menuActive' : ''">
+                                    <a th:href="@{/login}" th:text="#{tabmenu.slide.login}">Login</a>
+                                </td>
+                                <td width="12.5%" th:id="${activeMenu == 'bestellform'} ? 'menuActive' : ''">
+                                    <a th:href="@{/order/new}" th:text="#{tabmenu.slide.order}">Order</a>
+                                </td>
+                                <td width="12.5%" th:id="${activeMenu == 'kontotyp'} ? 'menuActive' : ''">
+                                    <a th:href="@{/services}" th:text="#{tabmenu.slide.services}">Services</a>
+                                </td>
+                                <td width="12.5%" th:id="${activeMenu == 'impressum'} ? 'menuActive' : ''">
+                                    <a th:href="@{/impressum}" th:text="#{tabmenu.slide.about}">About</a>
+                                </td>
+                                <td width="12.5%" th:id="${activeMenu == 'howto'} ? 'menuActive' : ''">
+                                    <a th:href="@{/howto}" th:text="#{tabmenu.slide.howto}">How-To</a>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </table>
+                    </sec:authorize>
+
+                    <!-- Menu for authenticated users -->
+                    <sec:authorize access="isAuthenticated()">
+                        <table style="width:1120px;" sec:authorize="!hasRole('ADMIN')">
+                            <tr>
+                                <td width="12.5%" th:id="${activeMenu == 'suchenbestellen'} ? 'menuActive' : ''">
+                                    <a th:href="@{/searchfree}" th:text="#{tabmenu.slide.search}">Search</a>
+                                </td>
+                                <td width="12.5%" th:id="${activeMenu == 'uebersicht'} ? 'menuActive' : ''">
+                                    <a th:href="@{/uebersicht}" th:text="#{tabmenu.slide.track}">Track</a>
+                                </td>
+                                <sec:authorize access="hasAnyRole('ADMIN', 'LIBRARIAN')">
+                                    <td width="12.5%" th:id="${activeMenu == 'bibliokunden'} ? 'menuActive' : ''">
+                                        <a th:href="@{/user/list}" th:text="#{tabmenu.slide.patrons}">Patrons</a>
+                                    </td>
+                                    <td width="12.5%" th:id="${activeMenu == 'stats'} ? 'menuActive' : ''">
+                                        <a th:href="@{/statistics}" th:text="#{tabmenu.slide.statistics}">Statistics</a>
+                                    </td>
+                                    <td width="12.5%" th:id="${activeMenu == 'konto'} ? 'menuActive' : ''">
+                                        <a th:href="@{/konto/view}" th:text="#{tabmenu.slide.account}">Account</a>
+                                    </td>
+                                    <td width="12.5%" th:id="${activeMenu == 'stock'} ? 'menuActive' : ''">
+                                        <a th:href="@{/stock}" th:text="#{tabmenu.slide.holdings}">Holdings</a>
+                                    </td>
+                                </sec:authorize>
+                                <sec:authorize access="hasRole('ADMIN')">
+                                    <td width="12.5%" th:id="${activeMenu == 'admin'} ? 'menuActive' : ''">
+                                        <a th:href="@{/admin}" th:text="#{tabmenu.slide.admin}">Admin</a>
+                                    </td>
+                                </sec:authorize>
+                                <td width="12.5%" th:id="${activeMenu == 'howto'} ? 'menuActive' : ''">
+                                    <a th:href="@{/howto}" th:text="#{tabmenu.slide.howto}">How-To</a>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </table>
+                    </sec:authorize>
+                </div>
+            </td>
+            <!-- Language selector -->
+            <td align="right">
+                <table align="right">
+                    <tr>
+                        <td align="right">
+                            <a th:href="@{/language(lang=fr)}">
+                                <img th:src="@{/img/fr.png}" alt="Français" class="whiteborder"/>
+                            </a>
+                        </td>
+                        <td>&nbsp;</td>
+                        <td align="right">
+                            <a th:href="@{/language(lang=en)}">
+                                <img th:src="@{/img/en.png}" alt="English" class="whiteborder"/>
+                            </a>
+                        </td>
+                        <td>&nbsp;</td>
+                        <td align="right">
+                            <a th:href="@{/language(lang=de)}">
+                                <img th:src="@{/img/de.png}" alt="Deutsch" class="whiteborder"/>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- Messages Fragment -->
+<div th:fragment="messages">
+    <div th:if="${success}" style="color:green; font-weight:bold; padding:10px;">
+        <span th:text="#{${success}}">Success</span>
+    </div>
+    <div th:if="${error}" style="color:red; font-weight:bold; padding:10px;">
+        <span th:text="#{${error}}">Error</span>
+    </div>
+</div>
+
+<!-- Footer Fragment -->
+<div th:fragment="footer">
+    <p><br/></p>
+    <p style="text-align:center; color:#333;">
+        <span th:text="${@doctorDocProperties.applicationName}">Doctor-Doc</span>
+        &copy; <span th:text="${#dates.year(#dates.createNow())}">2026</span>
+    </p>
+</div>
+
+</html>

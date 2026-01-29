@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{order.form.title})}">
+    <title>Order Form</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: messages}"></div>
+
+<div class="container mt-3">
+
+    <h2 th:text="${orderDto.id != null} ? #{order.edit.title} : #{order.new.title}">Order</h2>
+
+    <form th:action="${orderDto.id != null} ? @{/order/edit/{id}(id=${orderDto.id})} : @{/order/new}"
+          th:object="${orderDto}" method="post" class="needs-validation" novalidate>
+
+        <div class="row">
+            <!-- Article Information -->
+            <div class="col-lg-8">
+                <div class="card mb-3">
+                    <div class="card-header" th:text="#{order.section.article}">Article Information</div>
+                    <div class="card-body">
+
+                        <!-- Media Type -->
+                        <div class="mb-3">
+                            <label class="form-label" th:text="#{order.mediatype}">Media Type</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" th:field="*{mediatype}" value="Artikel" id="mediaArticle">
+                                    <label class="form-check-label" for="mediaArticle" th:text="#{mediatype.artikel}">Article</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" th:field="*{mediatype}" value="Buch" id="mediaBook">
+                                    <label class="form-check-label" for="mediaBook" th:text="#{mediatype.buch}">Book</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" th:field="*{mediatype}" value="Teilkopie Buch" id="mediaBookPart">
+                                    <label class="form-check-label" for="mediaBookPart" th:text="#{mediatype.teilkopie}">Book Chapter</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="artikeltitel" class="form-label" th:text="#{order.artikeltitel}">Title</label>
+                                <input type="text" class="form-control" id="artikeltitel" th:field="*{artikeltitel}"
+                                       th:classappend="${#fields.hasErrors('artikeltitel')} ? 'is-invalid'">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('artikeltitel')}" th:errors="*{artikeltitel}">Error</div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="author" class="form-label" th:text="#{order.author}">Author</label>
+                                <input type="text" class="form-control" id="author" th:field="*{author}">
+                            </div>
+                        </div>
+
+                        <div class="row" id="journalFields">
+                            <div class="col-md-6 mb-3">
+                                <label for="zeitschriftentitel" class="form-label" th:text="#{order.zeitschrift}">Journal</label>
+                                <input type="text" class="form-control" id="zeitschriftentitel" th:field="*{zeitschriftentitel}">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="issn" class="form-label">ISSN</label>
+                                <input type="text" class="form-control" id="issn" th:field="*{issn}">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="doi" class="form-label">DOI</label>
+                                <input type="text" class="form-control" id="doi" th:field="*{doi}">
+                            </div>
+                        </div>
+
+                        <div class="row" id="bookFields" style="display:none;">
+                            <div class="col-md-6 mb-3">
+                                <label for="buchtitel" class="form-label" th:text="#{order.buchtitel}">Book Title</label>
+                                <input type="text" class="form-control" id="buchtitel" th:field="*{buchtitel}">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="isbn" class="form-label">ISBN</label>
+                                <input type="text" class="form-control" id="isbn" th:field="*{isbn}">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="verlag" class="form-label" th:text="#{order.verlag}">Publisher</label>
+                                <input type="text" class="form-control" id="verlag" th:field="*{verlag}">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 mb-3">
+                                <label for="jahr" class="form-label" th:text="#{order.jahr}">Year</label>
+                                <input type="text" class="form-control" id="jahr" th:field="*{jahr}">
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="jahrgang" class="form-label" th:text="#{order.jahrgang}">Volume</label>
+                                <input type="text" class="form-control" id="jahrgang" th:field="*{jahrgang}">
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="heft" class="form-label" th:text="#{order.heft}">Issue</label>
+                                <input type="text" class="form-control" id="heft" th:field="*{heft}">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="seiten" class="form-label" th:text="#{order.seiten}">Pages</label>
+                                <input type="text" class="form-control" id="seiten" th:field="*{seiten}"
+                                       th:placeholder="#{order.seiten.placeholder}">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="pmid" class="form-label">PubMed ID</label>
+                                <input type="text" class="form-control" id="pmid" th:field="*{pmid}">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="notizen" class="form-label" th:text="#{order.notizen}">Notes</label>
+                            <textarea class="form-control" id="notizen" th:field="*{notizen}" rows="3"></textarea>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Settings -->
+            <div class="col-lg-4">
+                <!-- Customer Selection (Librarian only) -->
+                <div class="card mb-3" th:if="${isLibrarian and users != null}">
+                    <div class="card-header" th:text="#{order.section.customer}">Customer</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="forUserId" class="form-label" th:text="#{order.foruser}">Order for</label>
+                            <select class="form-select" id="forUserId" th:field="*{forUserId}">
+                                <option value="0" th:text="#{order.foruser.myself}">Myself</option>
+                                <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.fullName}">User</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Supplier -->
+                <div class="card mb-3">
+                    <div class="card-header" th:text="#{order.section.supplier}">Supplier</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="lieferantId" class="form-label" th:text="#{order.supplier}">Supplier</label>
+                            <select class="form-select" id="lieferantId" th:field="*{lieferantId}">
+                                <option value="" th:text="#{order.supplier.select}">Select...</option>
+                                <option th:each="s : ${suppliers}" th:value="${s.id}" th:text="${s.lieferant}">Supplier</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delivery Options -->
+                <div class="card mb-3">
+                    <div class="card-header" th:text="#{order.section.delivery}">Delivery</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="deloptions" class="form-label" th:text="#{order.deloptions}">Delivery Method</label>
+                            <select class="form-select" id="deloptions" th:field="*{deloptions}">
+                                <option value="post" th:text="#{deloptions.post}">Post</option>
+                                <option value="email" th:text="#{deloptions.email}">Email</option>
+                                <option value="fax" th:text="#{deloptions.fax}">Fax</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="priority" class="form-label" th:text="#{order.priority}">Priority</label>
+                            <select class="form-select" id="priority" th:field="*{priority}">
+                                <option value="normal" th:text="#{priority.normal}">Normal</option>
+                                <option value="eilt" th:text="#{priority.eilt}">Urgent</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary" th:text="#{button.save}">Save</button>
+                    <a th:href="@{/uebersicht}" class="btn btn-outline-secondary" th:text="#{button.cancel}">Cancel</a>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+<script th:inline="javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    const mediaRadios = document.querySelectorAll('input[name="mediatype"]');
+    const journalFields = document.getElementById('journalFields');
+    const bookFields = document.getElementById('bookFields');
+
+    function updateFields() {
+        const selected = document.querySelector('input[name="mediatype"]:checked').value;
+        if (selected === 'Artikel') {
+            journalFields.style.display = 'flex';
+            bookFields.style.display = 'none';
+        } else {
+            journalFields.style.display = 'none';
+            bookFields.style.display = 'flex';
+        }
+    }
+
+    mediaRadios.forEach(radio => radio.addEventListener('change', updateFields));
+    updateFields();
+});
+</script>
+
+</body>
+</html>

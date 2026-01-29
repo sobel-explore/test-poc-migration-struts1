@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{order.detail.title})}">
+    <title>Order Detail</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: messages}"></div>
+
+<div class="container mt-3">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/uebersicht}" th:text="#{menu.orders}">Orders</a></li>
+            <li class="breadcrumb-item active" th:text="'#' + ${order.id}">Order</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Order Details -->
+        <div class="col-lg-8">
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 th:text="#{order.detail.title}">Order Details</h5>
+                    <span class="badge"
+                          th:classappend="${order.erledigt} ? 'bg-success' : 'bg-warning'"
+                          th:text="#{|status.${order.statustext}|}">Status</span>
+                </div>
+                <div class="card-body">
+
+                    <!-- Article Info -->
+                    <h6 th:text="#{order.section.article}">Article Information</h6>
+                    <dl class="row">
+                        <dt class="col-sm-3" th:text="#{order.artikeltitel}">Title</dt>
+                        <dd class="col-sm-9" th:text="${order.artikeltitel}">-</dd>
+
+                        <dt class="col-sm-3" th:text="#{order.author}">Author</dt>
+                        <dd class="col-sm-9" th:text="${order.autor ?: '-'}">-</dd>
+
+                        <dt class="col-sm-3" th:text="#{order.zeitschrift}">Journal</dt>
+                        <dd class="col-sm-9" th:text="${order.zeitschrift ?: '-'}">-</dd>
+
+                        <dt class="col-sm-3">ISSN</dt>
+                        <dd class="col-sm-9" th:text="${order.issn ?: '-'}">-</dd>
+
+                        <dt class="col-sm-3" th:text="#{order.jahr}">Year</dt>
+                        <dd class="col-sm-9" th:text="${order.jahr ?: '-'}">-</dd>
+
+                        <dt class="col-sm-3" th:text="#{order.jahrgang}">Volume</dt>
+                        <dd class="col-sm-9" th:text="${order.jahrgang ?: '-'}">-</dd>
+
+                        <dt class="col-sm-3" th:text="#{order.heft}">Issue</dt>
+                        <dd class="col-sm-9" th:text="${order.heft ?: '-'}">-</dd>
+
+                        <dt class="col-sm-3" th:text="#{order.seiten}">Pages</dt>
+                        <dd class="col-sm-9" th:text="${order.seiten ?: '-'}">-</dd>
+
+                        <dt class="col-sm-3" th:if="${order.doi}">DOI</dt>
+                        <dd class="col-sm-9" th:if="${order.doi}">
+                            <a th:href="'https://doi.org/' + ${order.doi}" target="_blank" th:text="${order.doi}">DOI</a>
+                        </dd>
+                    </dl>
+
+                    <hr th:if="${order.notizen or order.systembemerkung}">
+
+                    <!-- Notes -->
+                    <div th:if="${order.notizen}">
+                        <h6 th:text="#{order.notizen}">Notes</h6>
+                        <p th:text="${order.notizen}">Notes content</p>
+                    </div>
+
+                    <div th:if="${order.systembemerkung and isLibrarian}">
+                        <h6 th:text="#{order.systembemerkung}">System Notes</h6>
+                        <p th:text="${order.systembemerkung}">System notes content</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Order Info -->
+            <div class="card mb-3">
+                <div class="card-header" th:text="#{order.section.info}">Order Information</div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-6" th:text="#{order.id}">Order ID</dt>
+                        <dd class="col-6" th:text="${order.id}">#1</dd>
+
+                        <dt class="col-6" th:text="#{order.orderdate}">Order Date</dt>
+                        <dd class="col-6" th:text="${#temporals.format(order.orderdate, 'dd.MM.yyyy HH:mm')}">01.01.2024</dd>
+
+                        <dt class="col-6" th:text="#{order.statusdate}">Status Date</dt>
+                        <dd class="col-6" th:text="${#temporals.format(order.statusdate, 'dd.MM.yyyy HH:mm')}">01.01.2024</dd>
+
+                        <dt class="col-6" th:if="${order.lieferant}" th:text="#{order.supplier}">Supplier</dt>
+                        <dd class="col-6" th:if="${order.lieferant}" th:text="${order.lieferant.name}">Supplier</dd>
+
+                        <dt class="col-6" th:text="#{order.deloptions}">Delivery</dt>
+                        <dd class="col-6" th:text="#{|deloptions.${order.deloptions}|}">Post</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Customer Info (Librarian only) -->
+            <div class="card mb-3" th:if="${isLibrarian and order.benutzer != null}">
+                <div class="card-header" th:text="#{order.section.customer}">Customer</div>
+                <div class="card-body">
+                    <p class="mb-1" th:text="${order.benutzer.fullName}">Name</p>
+                    <p class="mb-1 text-muted" th:text="${order.benutzer.email}">email@example.com</p>
+                    <p class="mb-0 text-muted" th:if="${order.benutzer.institut}" th:text="${order.benutzer.institut}">Institution</p>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="card" th:if="${isLibrarian}">
+                <div class="card-header" th:text="#{order.section.actions}">Actions</div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/order/edit/{id}(id=${order.id})}"
+                           class="btn btn-outline-primary" th:text="#{order.edit}">Edit</a>
+
+                        <!-- Status Update -->
+                        <form th:action="@{/order/status/{id}(id=${order.id})}" method="post" class="mb-2">
+                            <div class="input-group">
+                                <select name="status" class="form-select">
+                                    <option value="pending" th:text="#{status.pending}">Pending</option>
+                                    <option value="ordered" th:text="#{status.ordered}">Ordered</option>
+                                    <option value="delivered" th:text="#{status.delivered}">Delivered</option>
+                                    <option value="closed" th:text="#{status.closed}">Closed</option>
+                                </select>
+                                <button type="submit" class="btn btn-outline-secondary" th:text="#{order.updatestatus}">Update</button>
+                            </div>
+                        </form>
+
+                        <form th:action="@{/order/delete/{id}(id=${order.id})}" method="post"
+                              onsubmit="return confirm('Are you sure?');">
+                            <button type="submit" class="btn btn-outline-danger w-100" th:text="#{order.delete}">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a th:href="@{/uebersicht}" class="btn btn-secondary" th:text="#{button.back}">Back to Overview</a>
+    </div>
+
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+</html>

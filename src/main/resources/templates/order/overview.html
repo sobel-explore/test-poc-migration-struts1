@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{uebersicht.titel})}">
+    <title>Orders Overview</title>
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<!-- Submenu for status filters -->
+<table style="position:absolute; text-align:left; left:170px; z-index:2;">
+    <tr>
+        <td th:id="${status == 'offen' or status == ''} ? 'submenuactive' : 'submenu'" nowrap="nowrap">
+            <a th:href="@{/uebersicht(filter=offen)}" th:text="#{menu.open}">Open</a>
+        </td>
+        <td th:id="${status == 'erledigt'} ? 'submenuactive' : 'submenu'" nowrap="nowrap">
+            <a th:href="@{/uebersicht(filter=erledigt)}" th:text="#{menu.closed}">Closed</a>
+        </td>
+        <td th:id="${status == 'reklamiert'} ? 'submenuactive' : 'submenu'" nowrap="nowrap">
+            <a th:href="@{/uebersicht(filter=reklamiert)}" th:text="#{menu.claimed}">Claimed</a>
+        </td>
+        <td th:id="${status == 'zu bestellen'} ? 'submenuactive' : 'submenu'" nowrap="nowrap">
+            <a th:href="@{/uebersicht(filter='zu bestellen')}" th:text="#{menu.toOrder}">To Order</a>
+        </td>
+        <td th:id="${status == 'bestellt'} ? 'submenuactive' : 'submenu'" nowrap="nowrap">
+            <a th:href="@{/uebersicht(filter=bestellt)}" th:text="#{menu.ordered}">Ordered</a>
+        </td>
+        <td th:id="${status == 'geliefert'} ? 'submenuactive' : 'submenu'" nowrap="nowrap">
+            <a th:href="@{/uebersicht(filter=geliefert)}" th:text="#{menu.shipped}">Shipped</a>
+        </td>
+        <td th:id="${status == 'nicht lieferbar'} ? 'submenuactive' : 'submenu'" nowrap="nowrap">
+            <a th:href="@{/uebersicht(filter='nicht lieferbar')}" th:text="#{menu.unfilled}">Unfilled</a>
+        </td>
+        <td id="submenu" nowrap="nowrap">
+            <a th:href="@{/uebersicht}" th:text="#{menu.allorders}">All</a>
+        </td>
+        <sec:authorize access="hasAnyRole('ADMIN', 'LIBRARIAN')">
+            <td id="submenu" nowrap="nowrap">
+                <a th:href="@{/searchorder}" th:text="#{menu.advancedsearch}">Advanced Search</a>
+            </td>
+        </sec:authorize>
+    </tr>
+</table>
+
+<div class="content">
+    <br/><br/>
+
+    <!-- Search form -->
+    <sec:authorize access="hasAnyRole('ADMIN', 'LIBRARIAN')">
+        <form th:action="@{/uebersicht}" method="get">
+            <table width="100%">
+                <tr>
+                    <td align="center">
+                        <table align="center">
+                            <tr>
+                                <td>
+                                    <select name="field">
+                                        <option value="all" th:text="#{searchorders.all}">All fields</option>
+                                        <option value="artikeltitel" th:text="#{uebersicht.article}">Article</option>
+                                        <option value="zeitschrift" th:text="#{uebersicht.journal}">Journal</option>
+                                        <option value="autor" th:text="#{bestellform.author}">Author</option>
+                                        <option value="issn">ISSN</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="condition">
+                                        <option value="contains" th:text="#{uebersicht.contains}">contains</option>
+                                        <option value="is" th:text="#{uebersicht.is}">is</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input name="search" th:value="${search}" type="text" size="35" maxlength="100"/>
+                                </td>
+                                <td>
+                                    <input type="submit" th:value="#{searchorders.submit}" value="Search"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </sec:authorize>
+
+    <p></p>
+
+    <!-- Results info and PDF link -->
+    <sec:authorize access="hasAnyRole('ADMIN', 'LIBRARIAN')">
+        <a class="black" target="_blank" th:href="@{/orderreport/pdf}">
+            <img th:src="@{/img/pdf-druckvorschau.png}" th:alt="#{uebersicht.pdf}" th:title="#{uebersicht.pdf}" height="30" width="26" border="0"/>
+        </a>
+    </sec:authorize>
+
+    <span th:text="#{uebersicht.titel}">Overview</span> -
+    <span th:text="#{uebersicht.total}">Total</span>: <span th:text="${totalItems}">0</span> |
+    <span th:text="#{uebersicht.page}">Page</span>: <span th:text="${currentPage + 1}">1</span>
+
+    <!-- Orders Table -->
+    <table class="border">
+        <tr>
+            <th id="th-center"></th>
+            <th id="th-center">
+                <a th:href="@{/uebersicht(sort=mediatype,sortorder=asc)}">
+                    <img th:src="@{/img/up.png}" th:alt="#{uebersicht.sort_asc}" border="0"/>
+                </a><br/>
+                <span th:text="#{uebersicht.typ}">Type</span><br/>
+                <a th:href="@{/uebersicht(sort=mediatype,sortorder=desc)}">
+                    <img th:src="@{/img/down.png}" th:alt="#{uebersicht.sort_desc}" border="0"/>
+                </a>
+            </th>
+            <th id="th-center">
+                <a th:href="@{/uebersicht(sort=orderdate,sortorder=asc)}">
+                    <img th:src="@{/img/up.png}" th:alt="#{uebersicht.sort_asc}" border="0"/>
+                </a><br/>
+                <span th:text="#{uebersicht.orderdate}">Order Date</span><br/>
+                <a th:href="@{/uebersicht(sort=orderdate,sortorder=desc)}">
+                    <img th:src="@{/img/down.png}" th:alt="#{uebersicht.sort_desc}" border="0"/>
+                </a>
+            </th>
+            <th id="th-center">
+                <span th:text="#{uebersicht.supplier}">Supplier</span>
+            </th>
+            <th id="th-center">
+                <span th:text="#{uebersicht.state}">Status</span>
+            </th>
+            <th id="th-center">
+                <span th:text="#{uebersicht.statedate}">Status Date</span>
+            </th>
+            <th id="th-center">
+                <span th:text="#{uebersicht.deliveryway}">Delivery</span>
+            </th>
+            <th id="th-center" sec:authorize="hasAnyRole('ADMIN', 'LIBRARIAN')">
+                <span th:text="#{uebersicht.patron}">Patron</span>
+            </th>
+            <th id="th-center" width="23%">
+                <span th:text="#{uebersicht.article}">Article</span>
+            </th>
+            <th id="th-center" width="12%">
+                <span th:text="#{uebersicht.journal}">Journal</span>
+            </th>
+            <th id="th-center">
+                <span th:text="#{uebersicht.notes}">Notes</span>
+            </th>
+            <th id="th-center">&nbsp;</th>
+        </tr>
+
+        <tr th:each="order : ${orders.content}">
+            <td id="border">
+                <nobr>
+                    <sec:authorize access="hasAnyRole('ADMIN', 'LIBRARIAN')">
+                        &nbsp;
+                        <a th:href="@{/order/edit/{id}(id=${order.id})}">
+                            <img border="0" th:src="@{/img/edit.png}" th:alt="#{uebersicht.modify}" th:title="#{uebersicht.modify}"/>
+                        </a>
+                        &nbsp;&nbsp;
+                        <a th:href="@{/order/ilv/{id}(id=${order.id})}">
+                            <img border="0" th:src="@{/img/faxpiktogramm.png}" th:title="#{ilv-report.titleprepare}"/>
+                        </a>
+                        <br/>
+                    </sec:authorize>
+                    &nbsp;
+                    <a th:href="@{/order/reorder/{id}(id=${order.id})}">
+                        <img border="0" th:src="@{/img/reorder.png}" th:alt="#{uebersicht.reorder}" th:title="#{uebersicht.reorder}"/>
+                    </a>
+                    &nbsp;
+                    <sec:authorize access="hasAnyRole('ADMIN', 'LIBRARIAN')">
+                        <a th:href="@{/order/delete/{id}(id=${order.id})}">
+                            <img border="0" th:src="@{/img/drop.png}" th:alt="#{uebersicht.drop}" th:title="#{uebersicht.drop}"/>
+                        </a>
+                    </sec:authorize>
+                    &nbsp;
+                </nobr>
+            </td>
+            <td id="border">
+                <img th:if="${order.mediatype == 'Artikel'}" border="0" th:src="@{/img/article.gif}" th:alt="#{bestellform.artikelkopie}"/>
+                <img th:if="${order.mediatype == 'Buch'}" border="0" th:src="@{/img/book.gif}" th:alt="#{bestellform.buch}"/>
+                <img th:if="${order.mediatype == 'Teilkopie Buch'}" border="0" th:src="@{/img/Teilkopie_B.png}" th:alt="#{bestellform.buchausschnitt}"/>
+            </td>
+            <td id="border" th:text="${#temporals.format(order.orderdate, 'dd.MM.yyyy')}">&nbsp;</td>
+            <td id="border" th:text="${order.bestellquelle}">&nbsp;</td>
+            <td id="border" th:text="${order.state}">&nbsp;</td>
+            <td id="border" th:text="${order.statedate != null} ? ${#temporals.format(order.statedate, 'dd.MM.yyyy')} : ''">&nbsp;</td>
+            <td id="border" th:text="${order.deloptions}">&nbsp;</td>
+            <td id="border" sec:authorize="hasAnyRole('ADMIN', 'LIBRARIAN')">
+                <!-- Patron info would go here -->
+                &nbsp;
+            </td>
+            <td id="border" th:text="${order.artikeltitel}">&nbsp;</td>
+            <td id="border" th:text="${order.zeitschrift}">&nbsp;</td>
+            <td id="border">
+                <form th:action="@{/order/notes/{id}(id=${order.id})}" method="post">
+                    <nobr>
+                        <input type="image" th:src="@{/img/change.png}" th:alt="#{uebersicht.change_notes}"/>
+                        <textarea cols="15" rows="4" name="notizen" th:text="${order.notizen}" style="word-wrap:break-word;"></textarea>
+                    </nobr>
+                </form>
+            </td>
+            <td id="border">
+                <a th:href="@{/uebersicht/detail/{id}(id=${order.id})}">
+                    <img th:src="@{/img/details.png}" th:alt="#{uebersicht.details}" th:title="#{uebersicht.details}" border="0"/>
+                </a>
+            </td>
+        </tr>
+
+        <tr th:if="${orders.empty}">
+            <td id="border" colspan="12" style="text-align:center; padding:20px;" th:text="#{overview.noorders}">
+                No orders found
+            </td>
+        </tr>
+    </table>
+
+    <p></p>
+
+    <!-- Pagination -->
+    <div th:if="${totalPages > 1}">
+        <a th:if="${currentPage > 0}" th:href="@{/uebersicht(page=${currentPage - 1}, status=${status})}">
+            <img th:src="@{/img/left.png}" alt="Previous" border="0"/>
+        </a>
+
+        <th:block th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+            <a th:if="${i != currentPage}" th:href="@{/uebersicht(page=${i}, status=${status})}" th:text="${i + 1}">1</a>
+            <b th:if="${i == currentPage}" th:text="${i + 1}">1</b>
+            &nbsp;
+        </th:block>
+
+        <a th:if="${currentPage < totalPages - 1}" th:href="@{/uebersicht(page=${currentPage + 1}, status=${status})}">
+            <img th:src="@{/img/right.png}" alt="Next" border="0"/>
+        </a>
+    </div>
+
+    <p></p>
+
+    <div th:replace="~{fragments/layout :: footer}"></div>
+</div>
+
+</body>
+</html>

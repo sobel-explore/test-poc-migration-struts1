@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{user.form.title})}">
+    <title>User Form</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: messages}"></div>
+
+<div class="container mt-3">
+
+    <h2 th:text="${userDto.id != null} ? #{user.edit.title} : #{user.add.title}">User Form</h2>
+
+    <form th:action="${userDto.id != null} ? @{/user/edit/{id}(id=${userDto.id})} : @{/user/add}"
+          th:object="${userDto}" method="post" class="needs-validation" novalidate>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card mb-3">
+                    <div class="card-header" th:text="#{user.section.personal}">Personal Information</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2 mb-3">
+                                <label for="anrede" class="form-label" th:text="#{user.anrede}">Title</label>
+                                <select class="form-select" id="anrede" th:field="*{anrede}">
+                                    <option value="">-</option>
+                                    <option value="Herr">Herr</option>
+                                    <option value="Frau">Frau</option>
+                                    <option value="Mr">Mr</option>
+                                    <option value="Ms">Ms</option>
+                                    <option value="Dr">Dr</option>
+                                    <option value="Prof">Prof</option>
+                                </select>
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <label for="vorname" class="form-label" th:text="#{user.vorname}">First Name</label>
+                                <input type="text" class="form-control" id="vorname" th:field="*{vorname}"
+                                       th:classappend="${#fields.hasErrors('vorname')} ? 'is-invalid'" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('vorname')}" th:errors="*{vorname}">Error</div>
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <label for="name" class="form-label" th:text="#{user.name}">Last Name</label>
+                                <input type="text" class="form-control" id="name" th:field="*{name}"
+                                       th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label" th:text="#{user.email}">Email</label>
+                            <input type="email" class="form-control" id="email" th:field="*{email}"
+                                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="institut" class="form-label" th:text="#{user.institut}">Institution</label>
+                                <input type="text" class="form-control" id="institut" th:field="*{institut}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="abteilung" class="form-label" th:text="#{user.abteilung}">Department</label>
+                                <input type="text" class="form-control" id="abteilung" th:field="*{abteilung}">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="adresse" class="form-label" th:text="#{user.adresse}">Address</label>
+                            <input type="text" class="form-control" id="adresse" th:field="*{adresse}">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="plz" class="form-label" th:text="#{user.plz}">Postal Code</label>
+                                <input type="text" class="form-control" id="plz" th:field="*{plz}">
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <label for="ort" class="form-label" th:text="#{user.ort}">City</label>
+                                <input type="text" class="form-control" id="ort" th:field="*{ort}">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="land" class="form-label" th:text="#{user.land}">Country</label>
+                                <input type="text" class="form-control" id="land" th:field="*{land}">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="telefonnrg" class="form-label" th:text="#{user.telefon}">Phone</label>
+                                <input type="tel" class="form-control" id="telefonnrg" th:field="*{telefonnrg}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="librarycard" class="form-label" th:text="#{user.librarycard}">Library Card</label>
+                                <input type="text" class="form-control" id="librarycard" th:field="*{librarycard}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Password Section -->
+                <div class="card mb-3">
+                    <div class="card-header" th:text="#{user.section.password}">Password</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="password" class="form-label" th:text="#{user.password}">Password</label>
+                                <input type="password" class="form-control" id="password" th:field="*{password}"
+                                       th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</div>
+                                <small class="text-muted" th:if="${userDto.id != null}" th:text="#{user.password.hint}">Leave blank to keep current password</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="passwordConfirm" class="form-label" th:text="#{user.password.confirm}">Confirm Password</label>
+                                <input type="password" class="form-control" id="passwordConfirm" th:field="*{passwordConfirm}"
+                                       th:classappend="${#fields.hasErrors('passwordConfirm')} ? 'is-invalid'">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">Error</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Sidebar -->
+            <div class="col-lg-4">
+                <div class="card mb-3">
+                    <div class="card-header" th:text="#{user.section.settings}">Settings</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="rechte" class="form-label" th:text="#{user.role}">Role</label>
+                            <select class="form-select" id="rechte" th:field="*{rechte}">
+                                <option value="1" th:text="#{role.user}">User</option>
+                                <option value="2" th:text="#{role.librarian}">Librarian</option>
+                                <option value="3" sec:authorize="hasRole('ADMIN')" th:text="#{role.admin}">Admin</option>
+                            </select>
+                        </div>
+
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="kontostatus" th:field="*{kontostatus}">
+                            <label class="form-check-label" for="kontostatus" th:text="#{user.active}">Active</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="loginopt" th:field="*{loginopt}">
+                            <label class="form-check-label" for="loginopt" th:text="#{user.loginopt}">Can Login</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="userbestellung" th:field="*{userbestellung}">
+                            <label class="form-check-label" for="userbestellung" th:text="#{user.canorder}">Can Order</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary" th:text="#{button.save}">Save</button>
+                    <a th:href="@{/user/list}" class="btn btn-outline-secondary" th:text="#{button.cancel}">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+</html>

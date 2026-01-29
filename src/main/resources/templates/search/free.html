@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{findfree.titel})}">
+    <title>Search Free</title>
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: messages}"></div>
+
+<div class="content">
+
+    <br><br>
+
+    <sec:authorize access="isAuthenticated()">
+        <!-- Submenu -->
+        <table style="position:absolute; text-align:left; left:111px; z-index:2;">
+            <tr>
+                <td id="submenuactive" nowrap="nowrap">
+                    <a th:href="@{/searchfree}" th:text="#{menu.search}">Search</a>
+                </td>
+                <td id="submenu" nowrap="nowrap">
+                    <a th:href="@{/issnsearch}" th:text="#{menu.issn}">ISSN</a>
+                </td>
+                <sec:authorize access="hasAnyRole('LIBRARIAN', 'ADMIN')">
+                    <td id="submenu" nowrap="nowrap">
+                        <a th:href="@{/journalorder}" th:text="#{menu.subito}">Subito</a>
+                    </td>
+                </sec:authorize>
+                <sec:authorize access="hasAnyRole('LIBRARIAN', 'ADMIN')">
+                    <td id="submenu" nowrap="nowrap">
+                        <a th:href="@{/journalsave}" th:text="#{menu.save}">Save</a>
+                    </td>
+                </sec:authorize>
+            </tr>
+        </table>
+
+        <h3 th:text="#{findfree.header}">Search Free</h3>
+
+        <form th:action="@{/searchfree/search}" method="post">
+            <br>
+            <table>
+                <tr>
+                    <td th:text="#{bestellform.artikeltitel}">Article Title</td>
+                    <td><input name="artikeltitel" type="search" required="required" size="98"/></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td th:text="#{findfree.pmid}">PMID info</td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit" th:text="#{findfree.submit}">Search</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <br><br><br>
+
+        <div id="italic" th:text="#{findfree.comment}">Comment about search</div>
+    </sec:authorize>
+
+    <sec:authorize access="!isAuthenticated()">
+        <p th:text="#{error.timeout}">Session expired</p>
+        <p><a th:href="@{/login}" th:text="#{error.back}">Back to login</a></p>
+    </sec:authorize>
+
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+</html>

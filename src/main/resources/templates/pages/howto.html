@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('HowTo OpenURL')}">
+    <title>HowTo</title>
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: messages}"></div>
+
+<div class="content">
+
+    <!-- Submenu -->
+    <table style="position:absolute; text-align:left; z-index:2; left:400px;">
+        <tr>
+            <td th:id="${activesubmenu == 'OpenURL'} ? 'submenuactive' : 'submenu'" nowrap="nowrap">
+                <a th:href="@{/howto(activesubmenu=OpenURL)}">OpenURL</a>
+            </td>
+            <td th:id="${activesubmenu == 'bestellformular'} ? 'submenuactive' : 'submenu'" nowrap="nowrap">
+                <a th:href="@{/howto(activesubmenu=bestellformular)}" th:text="#{bestellformconfigureselect.titel}">Order Form</a>
+            </td>
+        </tr>
+    </table>
+
+    <br>
+
+    <!-- OpenURL Section -->
+    <div th:if="${activesubmenu == null or activesubmenu == 'OpenURL'}">
+        <h3>OpenURL - Linkresolver</h3>
+
+        <p><b>Base-URL: <span th:text="${serverInstallation}">http://localhost</span>/openurl</b></p>
+        <p th:text="#{openurl.intro(${@doctorDocProperties.applicationName})}">OpenURL intro</p>
+        <p th:text="#{openurl.anleitung(${@doctorDocProperties.applicationName})}">Instructions</p>
+
+        <ol>
+            <li th:text="#{openurl.newkonto(${@doctorDocProperties.applicationName})}">New account</li>
+            <li th:text="#{openurl.ip}">IP configuration</li>
+            <li th:text="#{openurl.baseurl}">Base URL</li>
+        </ol>
+
+        <p th:text="#{openurl.databases(${@doctorDocProperties.applicationName})}">Supported databases</p>
+
+        <table class="border">
+            <tr>
+                <th id="th-left" th:text="#{openurl.database}">Database</th>
+                <th id="th-left" th:text="#{openurl.kommentar}">Comment</th>
+            </tr>
+            <tr>
+                <td id="border"><a href="http://bibnet.org/vufind" target="_blank">bibnet.org</a></td>
+                <td id="border">&nbsp;</td>
+            </tr>
+            <tr>
+                <td id="border">Carelit</td>
+                <td id="border">&nbsp;</td>
+            </tr>
+            <tr>
+                <td id="border">CINAHL / EBSCO HOST</td>
+                <td id="border" th:text="#{openurl.cinahl_query}">CINAHL query</td>
+            </tr>
+            <tr>
+                <td id="border">CSA</td>
+                <td id="border">&nbsp;</td>
+            </tr>
+            <tr>
+                <td id="border">Endnote</td>
+                <td id="border">&nbsp;</td>
+            </tr>
+            <tr>
+                <td id="border">ISI Web of Science</td>
+                <td id="border">&nbsp;</td>
+            </tr>
+            <tr>
+                <td id="border">Ovid SP</td>
+                <td id="border" th:text="#{openurl.ovid_anleitung}">Ovid instructions</td>
+            </tr>
+            <tr>
+                <td id="border">Pubmed</td>
+                <td id="border" th:text="#{openurl.pubmed_anleitung}">Pubmed instructions</td>
+            </tr>
+            <tr>
+                <td id="border">Refworks</td>
+                <td id="border">&nbsp;</td>
+            </tr>
+            <tr>
+                <td id="border">ScienceDirect</td>
+                <td id="border">&nbsp;</td>
+            </tr>
+            <tr>
+                <td id="border">Scopus</td>
+                <td id="border" th:text="#{openurl.scopus_anleitung}">Scopus instructions</td>
+            </tr>
+            <tr>
+                <td id="border">Springer</td>
+                <td id="border" th:text="#{openurl.springer_query}">Springer query</td>
+            </tr>
+            <tr>
+                <td id="border">UpToDate</td>
+                <td id="border" th:text="#{openurl.uptodate_anleitung}">UpToDate instructions</td>
+            </tr>
+        </table>
+
+        <p th:text="#{openurl.gbv_anleitung}">GBV instructions</p>
+
+        <h3>Demo</h3>
+        <p th:text="#{bestellformconfigureselect.test}">Test</p>
+        <p>
+            <a href="http://www.doctor-doc.com/version1.0/openurl.do?kkid=medtest&amp;sid=Entrez:PubMed&amp;id=pmid:18221514" target="_blank">
+                http://www.doctor-doc.com/version1.0/openurl.do?kkid=medtest&amp;sid=Entrez:PubMed&amp;id=pmid:18221514
+            </a>
+        </p>
+    </div>
+
+    <!-- Bestellformular Section -->
+    <div th:if="${activesubmenu == 'bestellformular'}">
+        <h3>
+            <span th:text="#{bestellformconfigureselect.titel}">Order Form</span> -
+            <span th:text="#{bestellformconfigureselect.possible}">Options</span>
+        </h3>
+
+        <p><b>URL: <span th:text="${serverInstallation}">http://localhost</span>/bestellform?method=validate</b></p>
+
+        <p>
+            <span th:text="#{bestellformconfigureselect.description(${@doctorDocProperties.applicationName})}">Description</span>
+            <span th:text="#{bestellformconfigureselect.sprache(${@doctorDocProperties.applicationName})}">Language</span>
+        </p>
+
+        <p th:text="#{bestellformconfigureselect.noconfig}">No config</p>
+        <p th:text="#{bestellformconfigureselect.possibleconfig}">Possible config</p>
+
+        <table class="border">
+            <tr>
+                <th id="th-left" th:text="#{bestellformconfigureselect.zugriff}">Access</th>
+                <th id="th-left" th:text="#{bestellformconfigureselect.szenario}">Scenario</th>
+            </tr>
+            <tr>
+                <td id="border" th:text="#{bestellformconfigureselect.ip}">IP</td>
+                <td id="border" th:text="#{bestellformconfigureselect.ip_explain}">IP explanation</td>
+            </tr>
+            <tr>
+                <td id="border" th:text="#{bestellformconfigureselect.eingeloggt}">Logged in</td>
+                <td id="border" th:text="#{bestellformconfigureselect.eingeloggt_explain}">Logged in explanation</td>
+            </tr>
+            <tr>
+                <td id="border" th:text="#{bestellformconfigureselect.kkid}">KKID</td>
+                <td id="border" th:text="#{bestellformconfigureselect.kkid_explain}">KKID explanation</td>
+            </tr>
+            <tr>
+                <td id="border" th:text="#{bestellformconfigureselect.bkid}">BKID</td>
+                <td id="border" th:text="#{bestellformconfigureselect.bkid_explain}">BKID explanation</td>
+            </tr>
+        </table>
+
+        <br>
+
+        <h3 th:text="#{bestellformconfigureselect.external.title}">External Form</h3>
+        <p>
+            <span th:text="#{bestellformconfigureselect.external.text(${@doctorDocProperties.applicationName})}">External text</span>
+            <a href="https://sourceforge.net/apps/mediawiki/doctor-doc/index.php?title=Help:Contents#Can_I_use_the_official_orderform_of_my_institution.3F" target="_blank"
+               th:text="#{bestellformconfigureselect.anleitung}">Instructions</a>
+        </p>
+
+        <h3>Demo</h3>
+        <p th:text="#{bestellformconfigureselect.test}">Test</p>
+        <p>
+            <a href="http://www.doctor-doc.com/version1.0/bestellform.do?method=validate&amp;activemenu=bestellform&amp;kkid=medtest" target="_blank">
+                http://www.doctor-doc.com/version1.0/bestellform.do?method=validate&amp;activemenu=bestellform&amp;kkid=medtest
+            </a>
+        </p>
+    </div>
+
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+</html>

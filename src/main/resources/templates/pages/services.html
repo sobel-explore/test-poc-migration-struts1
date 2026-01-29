@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{anmeldungtyp.header})}">
+    <title>Services</title>
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: messages}"></div>
+
+<div class="content">
+
+    <br>
+    <h3 th:text="#{anmeldungtyp.titel}">Services</h3>
+
+    <p><b><span th:text="#{anmeldungtyp.intro(${@doctorDocProperties.applicationName})}">Doctor-Doc intro</span></b></p>
+
+    <table class="border">
+        <tr>
+            <th id="th-left" th:text="${@doctorDocProperties.applicationName}">Doctor-Doc</th>
+            <th id="th-center" th:text="#{anmeldungtyp.free}">Free</th>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.web}">Web based</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.issn}">ISSN search</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.autocomplete}">Autocomplete</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.availability}">Availability check</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.subito}">Subito</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.gbv}">GBV</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.books}">Books</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.preise}">Pricing</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.pdf}">PDF delivery</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.ilv}">ILL</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.suche}">Search</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.kunden}">Customers</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.berechtigungen}">Permissions</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.statistik}">Statistics</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.dropdown}">Dropdown menus</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.ip}">IP access</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.kennung}">Account ID</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border">
+                <a th:href="@{/howto}" th:text="#{bestellformconfigureselect.external.title}">External form</a>
+            </td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.openurl}">OpenURL</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" th:text="#{anmeldungtyp.linkresolver}">Link Resolver</td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border">
+                <a th:href="@{/daia}" target="_blank"
+                   th:text="#{anmeldungtyp.api(${@doctorDocProperties.applicationName})}">API</a>
+            </td>
+            <td id="border" align="center"><img th:src="@{/img/checkboxchecked.png}"/></td>
+        </tr>
+        <tr>
+            <td id="border" colspan="2">
+                <p></p>
+                <span th:text="#{anmeldungtyp.nocosts(${@doctorDocProperties.applicationName})}">No costs</span>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+</html>

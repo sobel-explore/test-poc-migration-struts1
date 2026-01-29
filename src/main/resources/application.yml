@@ -1,0 +1,144 @@
+spring:
+  application:
+    name: doctor-doc
+
+  # Database Configuration
+  datasource:
+    url: jdbc:mysql://localhost:3306/doctordoc?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Europe/Berlin&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      max-lifetime: 1200000
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    # Defer datasource initialization to allow app to start even if DB is unavailable
+    defer-datasource-initialization: true
+
+  # Thymeleaf Configuration
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+
+  # Messages / i18n
+  messages:
+    basename: messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
+
+  # Mail Configuration
+  mail:
+    host: ${MAIL_HOST:}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  # Servlet Configuration
+  servlet:
+    multipart:
+      max-file-size: 500KB
+      max-request-size: 1MB
+
+# Server Configuration
+server:
+  servlet:
+    context-path: /doctor-doc
+    session:
+      timeout: 30m
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.doctordoc: DEBUG
+    org.springframework.security: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+# Doctor-Doc Custom Configuration
+doctordoc:
+  # Application name (displayed throughout the application)
+  application-name: Doctor-Doc
+
+  # Base URL of installation (for OpenURL and links)
+  server-installation: ${SERVER_URL:http://localhost:8080/doctor-doc}
+
+  # Welcome page URL (leave empty for default login page)
+  welcome-page:
+
+  # System timezone
+  system-timezone: Europe/Berlin
+
+  # Default locale for country list (de/en)
+  default-locale: de
+
+  # System email configuration
+  system-email:
+    address: ${SYSTEM_EMAIL:}
+    host: ${MAIL_HOST:}
+    account-name: ${MAIL_USERNAME:}
+
+  # Error notification email
+  error-email: ${ERROR_EMAIL:}
+
+  # Billing reply-to email
+  billing-email: ${BILLING_EMAIL:}
+
+  # Allow registration of new library accounts
+  allow-register-library-accounts: false
+
+  # General Terms & Conditions
+  gtc:
+    enabled: false
+
+  # Paid access restriction
+  paid-access:
+    enabled: false
+
+  # Anonymization settings
+  anonymization:
+    enabled: true
+    after-months: 12
+
+  # Display settings
+  max-results-display: 200
+
+  # External services
+  carelit:
+    search-enabled: false
+
+  # DAIA (Document Availability Information API)
+  daia:
+    enabled: false
+    hosts: http://www.doctor-doc.com/version1.0/daia.do
+
+  # Seeks server for web search
+  seeks:
+    domains: http://seeks.ru,http://seeks.popolon.org
+
+  # GBV Requester ID
+  gbv:
+    requester-id:

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{admin.titel})}">
+    <title>Admin</title>
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: messages}"></div>
+
+<div class="content">
+
+    <sec:authorize access="hasRole('ADMIN')">
+
+        <br>
+
+        <h3 th:text="#{admin.header}">Administration</h3>
+
+        <!-- Admin Menu -->
+        <table class="border">
+            <tr>
+                <th id="th-left" th:text="#{admin.section}">Section</th>
+                <th id="th-left" th:text="#{admin.description}">Description</th>
+            </tr>
+            <tr>
+                <td id="border">
+                    <a th:href="@{/admin/kontos}" th:text="#{admin.kontos}">Accounts</a>
+                </td>
+                <td id="border" th:text="#{admin.kontos_desc}">Manage library accounts</td>
+            </tr>
+            <tr>
+                <td id="border">
+                    <a th:href="@{/admin/users}" th:text="#{admin.users}">Users</a>
+                </td>
+                <td id="border" th:text="#{admin.users_desc}">Manage all users</td>
+            </tr>
+            <tr>
+                <td id="border">
+                    <a th:href="@{/admin/suppliers}" th:text="#{admin.suppliers}">Suppliers</a>
+                </td>
+                <td id="border" th:text="#{admin.suppliers_desc}">Manage suppliers</td>
+            </tr>
+            <tr>
+                <td id="border">
+                    <a th:href="@{/admin/texts}" th:text="#{admin.texts}">Texts</a>
+                </td>
+                <td id="border" th:text="#{admin.texts_desc}">Manage system texts</td>
+            </tr>
+            <tr>
+                <td id="border">
+                    <a th:href="@{/admin/maintenance}" th:text="#{admin.maintenance}">Maintenance</a>
+                </td>
+                <td id="border" th:text="#{admin.maintenance_desc}">System maintenance</td>
+            </tr>
+            <tr>
+                <td id="border">
+                    <a th:href="@{/admin/memory}" th:text="#{admin.memory}">Memory</a>
+                </td>
+                <td id="border" th:text="#{admin.memory_desc}">Memory usage</td>
+            </tr>
+        </table>
+
+        <br>
+
+        <!-- System Info -->
+        <h4 th:text="#{admin.systeminfo}">System Information</h4>
+        <table class="border">
+            <tr>
+                <th id="tablestatsleft" th:text="#{admin.info}">Info</th>
+                <th id="tablestatsleft" th:text="#{admin.value}">Value</th>
+            </tr>
+            <tr>
+                <td id="border" th:text="#{admin.version}">Version</td>
+                <td id="border" th:text="${appVersion ?: 'N/A'}">1.0.0</td>
+            </tr>
+            <tr>
+                <td id="border" th:text="#{admin.totalkontos}">Total Accounts</td>
+                <td id="border" th:text="${totalKontos ?: 0}">0</td>
+            </tr>
+            <tr>
+                <td id="border" th:text="#{admin.totalusers}">Total Users</td>
+                <td id="border" th:text="${totalUsers ?: 0}">0</td>
+            </tr>
+            <tr>
+                <td id="border" th:text="#{admin.totalorders}">Total Orders</td>
+                <td id="border" th:text="${totalOrders ?: 0}">0</td>
+            </tr>
+            <tr>
+                <td id="border" th:text="#{admin.javaversion}">Java Version</td>
+                <td id="border" th:text="${javaVersion ?: 'N/A'}">17</td>
+            </tr>
+            <tr>
+                <td id="border" th:text="#{admin.memory.free}">Free Memory</td>
+                <td id="border" th:text="${freeMemory ?: 'N/A'}">100 MB</td>
+            </tr>
+            <tr>
+                <td id="border" th:text="#{admin.memory.total}">Total Memory</td>
+                <td id="border" th:text="${totalMemory ?: 'N/A'}">512 MB</td>
+            </tr>
+        </table>
+
+    </sec:authorize>
+
+    <sec:authorize access="!hasRole('ADMIN')">
+        <p th:text="#{error.noaccess}">Access denied - Admin only</p>
+    </sec:authorize>
+
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+</html>

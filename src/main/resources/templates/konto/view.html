@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{konto.view.title})}">
+    <title>Account Details</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: messages}"></div>
+
+<div class="container mt-3">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 th:text="#{konto.view.title}">Account Details</h2>
+        <a th:href="@{/konto/modify}" sec:authorize="hasAnyRole('ADMIN', 'LIBRARIAN')"
+           class="btn btn-primary" th:text="#{button.edit}">Edit</a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-3">
+                <div class="card-header" th:text="#{konto.section.info}">Library Information</div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4" th:text="#{konto.name}">Name</dt>
+                        <dd class="col-sm-8" th:text="${konto.bibliotheksname}">Library Name</dd>
+
+                        <dt class="col-sm-4">ISIL</dt>
+                        <dd class="col-sm-8" th:text="${konto.isil ?: '-'}">-</dd>
+
+                        <dt class="col-sm-4" th:text="#{konto.adresse}">Address</dt>
+                        <dd class="col-sm-8">
+                            <span th:text="${konto.adresse}">Address</span><br th:if="${konto.adressenzusatz}">
+                            <span th:if="${konto.adressenzusatz}" th:text="${konto.adressenzusatz}">Address 2</span>
+                        </dd>
+
+                        <dt class="col-sm-4" th:text="#{konto.plzort}">City</dt>
+                        <dd class="col-sm-8" th:text="${konto.plz} + ' ' + ${konto.ort}">12345 City</dd>
+
+                        <dt class="col-sm-4" th:text="#{konto.land}">Country</dt>
+                        <dd class="col-sm-8" th:text="${konto.land ?: '-'}">-</dd>
+
+                        <dt class="col-sm-4" th:text="#{konto.telefon}">Phone</dt>
+                        <dd class="col-sm-8" th:text="${konto.telefon ?: '-'}">-</dd>
+
+                        <dt class="col-sm-4" th:text="#{konto.email}">Email</dt>
+                        <dd class="col-sm-8" th:text="${konto.bibliotheksmail ?: '-'}">email@example.com</dd>
+
+                        <dt class="col-sm-4" th:text="#{konto.timezone}">Timezone</dt>
+                        <dd class="col-sm-8" th:text="${konto.timezone}">Europe/Berlin</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="card mb-3" sec:authorize="hasAnyRole('ADMIN', 'LIBRARIAN')">
+                <div class="card-header" th:text="#{konto.section.settings}">Account Settings</div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-6" th:text="#{konto.userlogin}">User Login Allowed</dt>
+                        <dd class="col-sm-6">
+                            <span class="badge" th:classappend="${konto.userlogin} ? 'bg-success' : 'bg-secondary'"
+                                  th:text="${konto.userlogin} ? #{yes} : #{no}">Yes</span>
+                        </dd>
+
+                        <dt class="col-sm-6" th:text="#{konto.userbestellung}">Users Can Order</dt>
+                        <dd class="col-sm-6">
+                            <span class="badge" th:classappend="${konto.userbestellung} ? 'bg-success' : 'bg-secondary'"
+                                  th:text="${konto.userbestellung} ? #{yes} : #{no}">Yes</span>
+                        </dd>
+
+                        <dt class="col-sm-6" th:text="#{konto.kontostatus}">Account Active</dt>
+                        <dd class="col-sm-6">
+                            <span class="badge" th:classappend="${konto.kontostatus} ? 'bg-success' : 'bg-danger'"
+                                  th:text="${konto.kontostatus} ? #{status.active} : #{status.inactive}">Active</span>
+                        </dd>
+
+                        <dt class="col-sm-6" th:if="${konto.maxordersj > 0}" th:text="#{konto.maxordersj}">Max Orders/Year</dt>
+                        <dd class="col-sm-6" th:if="${konto.maxordersj > 0}" th:text="${konto.maxordersj}">100</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card mb-3">
+                <div class="card-header" th:text="#{konto.section.type}">Account Type</div>
+                <div class="card-body text-center">
+                    <span class="badge bg-primary fs-5" th:text="${konto.kontotyp == 0} ? 'Free' : 'Premium'">Free</span>
+                    <p class="text-muted mt-2 mb-0" th:if="${konto.expdate != null}">
+                        <span th:text="#{konto.expdate}">Expires</span>:
+                        <span th:text="${#temporals.format(konto.expdate, 'dd.MM.yyyy')}">01.01.2025</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="card" th:if="${konto.instlogolink}">
+                <div class="card-header" th:text="#{konto.logo}">Logo</div>
+                <div class="card-body text-center">
+                    <img th:src="${konto.instlogolink}" alt="Logo" class="img-fluid" style="max-height: 100px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+</html>

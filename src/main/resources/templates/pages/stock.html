@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{stock.titel})}">
+    <title>Stock</title>
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: messages}"></div>
+
+<div class="content">
+
+    <sec:authorize access="hasAnyRole('LIBRARIAN', 'ADMIN')">
+
+        <br>
+
+        <!-- Submenu -->
+        <table style="position:absolute; text-align:left; z-index:2; left:400px;">
+            <tr>
+                <td id="submenuactive" nowrap="nowrap">
+                    <a th:href="@{/stock}" th:text="#{stock.overview}">Overview</a>
+                </td>
+                <td id="submenu" nowrap="nowrap">
+                    <a th:href="@{/stock/import}" th:text="#{stock.import}">Import</a>
+                </td>
+                <td id="submenu" nowrap="nowrap">
+                    <a th:href="@{/stock/export}" th:text="#{stock.export}">Export</a>
+                </td>
+            </tr>
+        </table>
+
+        <h3 th:text="#{stock.header}">Holdings/Stock</h3>
+
+        <!-- Search Form -->
+        <form th:action="@{/stock/search}" method="get">
+            <table>
+                <tr>
+                    <td th:text="#{stock.search}">Search:</td>
+                    <td>
+                        <input type="search" name="q" th:value="${query}" size="50"/>
+                    </td>
+                    <td>
+                        <button type="submit" th:text="#{button.search}">Search</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <br>
+
+        <!-- Stock List -->
+        <div th:if="${stocks != null and !stocks.empty}">
+            <table class="border">
+                <tr>
+                    <th id="th-left" th:text="#{stock.issn}">ISSN</th>
+                    <th id="th-left" th:text="#{stock.title}">Title</th>
+                    <th id="th-left" th:text="#{stock.holdings}">Holdings</th>
+                    <th id="th-center" th:text="#{stock.actions}">Actions</th>
+                </tr>
+                <tr th:each="stock : ${stocks}">
+                    <td id="border" th:text="${stock.issn}">1234-5678</td>
+                    <td id="border" th:text="${stock.titel}">Journal Title</td>
+                    <td id="border" th:text="${stock.bestand}">2000-2024</td>
+                    <td id="border" align="center">
+                        <a th:href="@{/stock/detail/{id}(id=${stock.id})}" th:text="#{uebersicht.details}">Details</a>
+                        |
+                        <a th:href="@{/stock/edit/{id}(id=${stock.id})}" th:text="#{uebersicht.modify}">Edit</a>
+                        |
+                        <a th:href="@{/stock/delete/{id}(id=${stock.id})}"
+                           onclick="return confirm('Are you sure?');"
+                           th:text="#{uebersicht.drop}">Delete</a>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Pagination -->
+            <div th:if="${totalPages > 1}">
+                <br>
+                <span th:text="#{uebersicht.page}">Page</span>:
+                <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+                    <a th:if="${i != currentPage}" th:href="@{/stock(page=${i})}" th:text="${i}">1</a>
+                    <b th:if="${i == currentPage}" th:text="${i}">1</b>
+                </span>
+            </div>
+        </div>
+
+        <div th:if="${stocks == null or stocks.empty}">
+            <p th:text="#{stock.empty}">No stock entries found.</p>
+        </div>
+
+        <br>
+
+        <a th:href="@{/stock/add}" class="button" th:text="#{stock.add}">Add New Entry</a>
+
+    </sec:authorize>
+
+    <sec:authorize access="!hasAnyRole('LIBRARIAN', 'ADMIN')">
+        <p th:text="#{error.noaccess}">Access denied</p>
+    </sec:authorize>
+
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+</html>

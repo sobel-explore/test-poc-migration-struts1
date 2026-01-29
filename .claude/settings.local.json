@@ -24,7 +24,19 @@
       "Bash(/c/dev/tools/maven/maven-3.9.11/bin/mvn.cmd clean package:*)",
       "Bash(unzip:*)",
       "Bash(ls:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(findstr:*)",
+      "Bash(C:/dev/tools/maven/maven-3.9.11/bin/mvn.cmd -f \"C:/dev/projects/poc-migration-strut-spring/doctor-doc-struts1/pom.xml\" clean compile)",
+      "Bash(C:/dev/tools/maven/maven-3.9.11/bin/mvn.cmd -f \"C:/dev/projects/poc-migration-strut-spring/doctor-doc-struts1/pom.xml\" clean package -DskipTests)",
+      "Bash(C:/dev/tools/maven/maven-3.9.11/bin/mvn.cmd -f \"C:/dev/projects/poc-migration-strut-spring/doctor-doc-struts1/pom.xml\" clean package -DskipTests -q)",
+      "Bash(/c/dev/tools/maven/maven-3.9.11/bin/mvn package:*)",
+      "Bash(bash -c:*)",
+      "Bash(cmd /c \"cd C:\\\\dev\\\\projects\\\\poc-migration-strut-spring\\\\doctor-doc-struts1 && mvn clean package -DskipTests\")",
+      "Bash(export JAVA_HOME=/c/dev/tools/jdk/jdk-17)",
+      "Bash(JAVA_HOME=/c/dev/tools/jdk/jdk-17 PATH=\"/c/dev/tools/maven/maven-3.9.11/bin:$PATH\" mvn clean package:*)",
+      "Bash(echo:*)",
+      "Bash(env)",
+      "Bash(powershell.exe -Command \"cd ''C:\\\\dev\\\\projects\\\\poc-migration-strut-spring\\\\doctor-doc-struts1''; mvn clean package -DskipTests\")"
     ]
   }
 }

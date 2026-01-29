@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head(#{searchorders.titel})}">
+    <title>Search Orders</title>
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: messages}"></div>
+
+<div class="content">
+
+    <br>
+
+    <h3 th:text="#{searchorders.header}">Advanced Search</h3>
+
+    <span th:text="#{searchorders.comment}">Search for orders</span>
+
+    <form th:action="@{/searchorder/search}" method="post">
+        <table>
+            <tr><td><br></td></tr>
+
+            <tr>
+                <td align="center">
+                    <!-- Date From -->
+                    <select name="dfrom">
+                        <option th:each="d : ${#numbers.sequence(1,31)}" th:value="${d}" th:text="${d}">1</option>
+                    </select>
+                    <select name="mfrom">
+                        <option th:each="m : ${#numbers.sequence(1,12)}" th:value="${m}" th:text="${m}">1</option>
+                    </select>
+                    <select name="yfrom">
+                        <option th:each="y : ${years}" th:value="${y}" th:text="${y}">2024</option>
+                    </select>
+                    -
+                    <!-- Date To -->
+                    <select name="dto">
+                        <option th:each="d : ${#numbers.sequence(1,31)}" th:value="${d}" th:text="${d}"
+                                th:selected="${d == 31}">1</option>
+                    </select>
+                    <select name="mto">
+                        <option th:each="m : ${#numbers.sequence(1,12)}" th:value="${m}" th:text="${m}"
+                                th:selected="${m == 12}">1</option>
+                    </select>
+                    <select name="yto">
+                        <option th:each="y : ${years}" th:value="${y}" th:text="${y}">2024</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+
+        <table>
+            <tr><td><br></td></tr>
+
+            <tr>
+                <td>
+                    <select name="value1">
+                        <option value="searchorders.all" th:text="#{searchorders.all}">All fields</option>
+                        <option value="artikeltitel" th:text="#{order.artikeltitel}">Title</option>
+                        <option value="zeitschrift" th:text="#{order.zeitschrift}">Journal</option>
+                        <option value="autor" th:text="#{order.author}">Author</option>
+                        <option value="issn">ISSN</option>
+                        <option value="jahr" th:text="#{order.jahr}">Year</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="condition1" size="1">
+                        <option value="contains" selected="selected" th:text="#{uebersicht.contains}">contains</option>
+                        <option value="contains not" th:text="#{uebersicht.contains_not}">contains not</option>
+                        <option value="is" th:text="#{uebersicht.is}">is</option>
+                        <option value="is not" th:text="#{uebersicht.is_not}">is not</option>
+                    </select>
+                </td>
+                <td>
+                    <input name="input1" value="" type="search" size="50" maxlength="100"/>
+                </td>
+                <td>
+                    <select name="boolean1" size="1">
+                        <option value="and" selected="selected" th:text="#{searchorders.and}">AND</option>
+                        <option value="or" th:text="#{searchorders.or}">OR</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select name="value2">
+                        <option value="searchorders.all" th:text="#{searchorders.all}">All fields</option>
+                        <option value="artikeltitel" th:text="#{order.artikeltitel}">Title</option>
+                        <option value="zeitschrift" th:text="#{order.zeitschrift}">Journal</option>
+                        <option value="autor" th:text="#{order.author}">Author</option>
+                        <option value="issn">ISSN</option>
+                        <option value="jahr" th:text="#{order.jahr}">Year</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="condition2" size="1">
+                        <option value="contains" selected="selected" th:text="#{uebersicht.contains}">contains</option>
+                        <option value="contains not" th:text="#{uebersicht.contains_not}">contains not</option>
+                        <option value="is" th:text="#{uebersicht.is}">is</option>
+                        <option value="is not" th:text="#{uebersicht.is_not}">is not</option>
+                    </select>
+                </td>
+                <td>
+                    <input name="input2" value="" type="search" size="50" maxlength="100"/>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+
+            <tr><td><br></td></tr>
+
+            <tr>
+                <td>
+                    <button type="submit" th:text="#{searchorders.submit}">Search</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+</html>
