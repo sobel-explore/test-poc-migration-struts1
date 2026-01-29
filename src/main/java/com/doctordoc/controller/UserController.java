@@ -27,6 +27,8 @@ import java.util.List;
 public class UserController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+    private static final String MENU_USER_MGMT = "benutzerverwaltung";
+    private static final String MENU_PROFILE = "profil";
 
     private final UserService userService;
 
@@ -48,7 +50,7 @@ public class UserController {
 
         model.addAttribute("users", users);
         model.addAttribute("konto", konto);
-        model.addAttribute("activeMenu", "benutzerverwaltung");
+        model.addAttribute("activeMenu", "MENU_USER_MGMT");
 
         return "user/list";
     }
@@ -65,7 +67,7 @@ public class UserController {
 
         model.addAttribute("userDto", new UserDto());
         model.addAttribute("konto", konto);
-        model.addAttribute("activeMenu", "benutzerverwaltung");
+        model.addAttribute("activeMenu", "MENU_USER_MGMT");
 
         return "user/form";
     }
@@ -92,7 +94,7 @@ public class UserController {
 
         if (result.hasErrors()) {
             model.addAttribute("konto", konto);
-            model.addAttribute("activeMenu", "benutzerverwaltung");
+            model.addAttribute("activeMenu", "MENU_USER_MGMT");
             return "user/form";
         }
 
@@ -137,7 +139,7 @@ public class UserController {
 
                     model.addAttribute("userDto", userDto);
                     model.addAttribute("konto", konto);
-                    model.addAttribute("activeMenu", "benutzerverwaltung");
+                    model.addAttribute("activeMenu", "MENU_USER_MGMT");
 
                     return "user/form";
                 })
@@ -160,7 +162,7 @@ public class UserController {
 
         if (result.hasErrors()) {
             model.addAttribute("konto", konto);
-            model.addAttribute("activeMenu", "benutzerverwaltung");
+            model.addAttribute("activeMenu", "MENU_USER_MGMT");
             return "user/form";
         }
 
@@ -197,16 +199,32 @@ public class UserController {
             return "redirect:/user/list";
         }
 
-        userService.delete(id);
+        // Security: Verify user belongs to current konto before deletion (IDOR protection)
+        return userService.findById(id)
+                .map(benutzer -> {
+                    boolean belongsToKonto = benutzer.getKontos().stream()
+                            .anyMatch(k -> k.getId().equals(konto.getId()));
 
-        LOG.info("User {} deleted user: {}", userDetails.getUsername(), id);
+                    if (!belongsToKonto) {
+                        LOG.warn("Unauthorized delete attempt: User {} tried to delete user {} not in their konto",
+                                userDetails.getUsername(), id);
+                        redirectAttributes.addFlashAttribute("error", "error.noaccess");
+                        return "redirect:/user/list";
+                    }
 
-        redirectAttributes.addFlashAttribute("success", "user.deleted");
-        return "redirect:/user/list";
+                    userService.delete(id);
+                    LOG.info("User {} deleted user: {}", userDetails.getUsername(), id);
+                    redirectAttributes.addFlashAttribute("success", "user.deleted");
+                    return "redirect:/user/list";
+                })
+                .orElseGet(() -> {
+                    redirectAttributes.addFlashAttribute("error", "user.notfound");
+                    return "redirect:/user/list";
+                });
     }
 
-    @GetMapping("/profile")
-    public String profileForm(@AuthenticationPrincipal DoctorDocUserDetails userDetails,
+    @GetMapping("/MENU_PROFILEe")
+    public String MENU_PROFILEeForm(@AuthenticationPrincipal DoctorDocUserDetails userDetails,
                               Model model) {
 
         Konto konto = userDetails.getActiveKonto();
@@ -217,12 +235,12 @@ public class UserController {
 
         model.addAttribute("userDto", userDto);
         model.addAttribute("konto", konto);
-        model.addAttribute("activeMenu", "profil");
+        model.addAttribute("activeMenu", "MENU_PROFILE");
 
-        return "user/profile";
+        return "user/MENU_PROFILEe";
     }
 
-    @PostMapping("/profile")
+    @PostMapping("/MENU_PROFILEe")
     public String updateProfile(@Valid @ModelAttribute("userDto") UserDto userDto,
                                 BindingResult result,
                                 @AuthenticationPrincipal DoctorDocUserDetails userDetails,
@@ -233,13 +251,13 @@ public class UserController {
 
         if (result.hasErrors()) {
             model.addAttribute("konto", konto);
-            model.addAttribute("activeMenu", "profil");
-            return "user/profile";
+            model.addAttribute("activeMenu", "MENU_PROFILE");
+            return "user/MENU_PROFILEe";
         }
 
         Benutzer benutzer = userDetails.getBenutzer();
 
-        // Only allow updating specific fields for own profile
+        // Only allow updating specific fields for own MENU_PROFILEe
         benutzer.setInstitut(userDto.getInstitut());
         benutzer.setAbteilung(userDto.getAbteilung());
         benutzer.setVorname(userDto.getVorname());
@@ -254,8 +272,8 @@ public class UserController {
 
         userService.save(benutzer);
 
-        redirectAttributes.addFlashAttribute("success", "profile.updated");
-        return "redirect:/user/profile";
+        redirectAttributes.addFlashAttribute("success", "MENU_PROFILEe.updated");
+        return "redirect:/user/MENU_PROFILEe";
     }
 
     private void mapDtoToEntity(UserDto dto, Benutzer entity) {

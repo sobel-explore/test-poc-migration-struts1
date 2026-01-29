@@ -3,7 +3,6 @@ package com.doctordoc.controller;
 import com.doctordoc.config.DoctorDocProperties;
 import com.doctordoc.entity.Konto;
 import com.doctordoc.security.DoctorDocUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,33 +19,49 @@ import java.util.List;
 @Controller
 public class PageController {
 
-    @Autowired
-    private DoctorDocProperties properties;
+    // Menu constants
+    private static final String MENU_SEARCH_ORDER = "suchenbestellen";
+    private static final String MENU_OVERVIEW = "uebersicht";
+    private static final String MENU_ACCOUNT_TYPE = "kontotyp";
+    private static final String MENU_IMPRESSUM = "impressum";
+    private static final String MENU_HOWTO = "howto";
+    private static final String MENU_STATS = "stats";
+    private static final String MENU_STOCK = "stock";
+    private static final String MENU_ADMIN = "admin";
+
+    // Year range for date selectors
+    private static final int YEAR_RANGE = 10;
+
+    private final DoctorDocProperties properties;
+
+    public PageController(DoctorDocProperties properties) {
+        this.properties = properties;
+    }
 
     @GetMapping("/searchfree")
     public String searchFree(@AuthenticationPrincipal DoctorDocUserDetails userDetails, Model model) {
         addCommonAttributes(userDetails, model);
-        model.addAttribute("activeMenu", "suchenbestellen");
+        model.addAttribute("activeMenu", MENU_SEARCH_ORDER);
         return "search/free";
     }
 
     @GetMapping("/searchorder")
     public String searchOrder(@AuthenticationPrincipal DoctorDocUserDetails userDetails, Model model) {
         addCommonAttributes(userDetails, model);
-        model.addAttribute("activeMenu", "uebersicht");
+        model.addAttribute("activeMenu", MENU_OVERVIEW);
         addYears(model);
         return "search/order";
     }
 
     @GetMapping("/services")
     public String services(Model model) {
-        model.addAttribute("activeMenu", "kontotyp");
+        model.addAttribute("activeMenu", MENU_ACCOUNT_TYPE);
         return "pages/services";
     }
 
     @GetMapping("/impressum")
     public String impressum(Model model) {
-        model.addAttribute("activeMenu", "impressum");
+        model.addAttribute("activeMenu", MENU_IMPRESSUM);
         return "pages/impressum";
     }
 
@@ -57,7 +72,7 @@ public class PageController {
         if (userDetails != null) {
             addCommonAttributes(userDetails, model);
         }
-        model.addAttribute("activeMenu", "howto");
+        model.addAttribute("activeMenu", MENU_HOWTO);
         model.addAttribute("activesubmenu", activesubmenu);
         model.addAttribute("serverInstallation", properties.getServerInstallation());
         return "pages/howto";
@@ -73,7 +88,7 @@ public class PageController {
                             @RequestParam(required = false) Integer yto,
                             Model model) {
         addCommonAttributes(userDetails, model);
-        model.addAttribute("activeMenu", "stats");
+        model.addAttribute("activeMenu", MENU_STATS);
 
         int currentYear = LocalDate.now().getYear();
         if (yfrom == null) yfrom = currentYear;
@@ -99,11 +114,10 @@ public class PageController {
                        @RequestParam(required = false, defaultValue = "1") Integer page,
                        Model model) {
         addCommonAttributes(userDetails, model);
-        model.addAttribute("activeMenu", "stock");
+        model.addAttribute("activeMenu", MENU_STOCK);
         model.addAttribute("query", q);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", 1);
-        // TODO: Add actual stock data from service
         model.addAttribute("stocks", new ArrayList<>());
         return "pages/stock";
     }
@@ -111,7 +125,7 @@ public class PageController {
     @GetMapping("/admin")
     public String admin(@AuthenticationPrincipal DoctorDocUserDetails userDetails, Model model) {
         addCommonAttributes(userDetails, model);
-        model.addAttribute("activeMenu", "admin");
+        model.addAttribute("activeMenu", MENU_ADMIN);
 
         // System info
         model.addAttribute("appVersion", "2.0.0-SPRING");
@@ -141,7 +155,7 @@ public class PageController {
     private void addYears(Model model) {
         List<Integer> years = new ArrayList<>();
         int currentYear = LocalDate.now().getYear();
-        for (int i = currentYear; i >= currentYear - 10; i--) {
+        for (int i = currentYear; i >= currentYear - YEAR_RANGE; i--) {
             years.add(i);
         }
         model.addAttribute("years", years);

@@ -33,6 +33,12 @@ public class OrderController {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderController.class);
 
+    // Order state constants
+    private static final String STATE_PENDING = "pending";
+    private static final String PRIORITY_NORMAL = "normal";
+    private static final Long DEFAULT_SUPPLIER_ID = 0L;
+    private static final String MENU_SEARCH_ORDER = "suchenbestellen";
+
     private final OrderService orderService;
     private final UserService userService;
     private final LieferantRepository lieferantRepository;
@@ -116,13 +122,13 @@ public class OrderController {
         order.setKontoId(konto.getId());
         order.setOrderdate(LocalDateTime.now());
         order.setStatedate(LocalDateTime.now());
-        order.setState("pending");
+        order.setState(STATE_PENDING);
 
         // Set supplier if selected
         if (orderDto.getLieferantId() != null) {
             order.setLieferantId(orderDto.getLieferantId());
         } else {
-            order.setLieferantId(0L); // Default value
+            order.setLieferantId(DEFAULT_SUPPLIER_ID);
         }
 
         orderService.save(order);
@@ -224,13 +230,28 @@ public class OrderController {
             return "redirect:/selectkonto";
         }
 
-        orderService.updateStatus(id, status);
+        // Security: Verify order belongs to current konto before updating (IDOR protection)
+        return orderService.findById(id)
+                .map(order -> {
+                    if (!orderService.isLegitimateOrder(userDetails.getBenutzer(), konto, order)) {
+                        LOG.warn("Unauthorized status update attempt: User {} tried to update order {} not in their konto",
+                                userDetails.getUsername(), id);
+                        redirectAttributes.addFlashAttribute("error", "error.noaccess");
+                        return "redirect:/uebersicht";
+                    }
 
-        LOG.info("User {} updated order {} status to {}",
-                userDetails.getUsername(), id, status);
+                    orderService.updateStatus(id, status);
 
-        redirectAttributes.addFlashAttribute("success", "order.status.updated");
-        return "redirect:/uebersicht/detail/" + id;
+                    LOG.info("User {} updated order {} status to {}",
+                            userDetails.getUsername(), id, status);
+
+                    redirectAttributes.addFlashAttribute("success", "order.status.updated");
+                    return "redirect:/uebersicht/detail/" + id;
+                })
+                .orElseGet(() -> {
+                    redirectAttributes.addFlashAttribute("error", "order.notfound");
+                    return "redirect:/uebersicht";
+                });
     }
 
     @PostMapping("/delete/{id}")
@@ -265,7 +286,7 @@ public class OrderController {
         model.addAttribute("konto", konto);
         model.addAttribute("user", userDetails.getBenutzer());
         model.addAttribute("isLibrarian", userDetails.isLibrarian() || userDetails.isAdmin());
-        model.addAttribute("activeMenu", "suchenbestellen");
+        model.addAttribute("activeMenu", MENU_SEARCH_ORDER);
 
         // Load suppliers (allgemein=true or belonging to this konto)
         List<Lieferant> suppliers = lieferantRepository.findByAllgemeinTrueOrKontoId(konto.getId());
@@ -295,7 +316,7 @@ public class OrderController {
         entity.setVerlag(dto.getVerlag() != null ? dto.getVerlag() : "");
         entity.setMediatype(dto.getMediatype() != null ? dto.getMediatype() : "");
         entity.setBestellquelle(dto.getBestellquelle());
-        entity.setOrderpriority(dto.getPriority() != null ? dto.getPriority() : "normal");
+        entity.setOrderpriority(dto.getPriority() != null ? dto.getPriority() : PRIORITY_NORMAL);
         entity.setFileformat(dto.getFileformat() != null ? dto.getFileformat() : "");
         entity.setDeloptions(dto.getDeloptions() != null ? dto.getDeloptions() : "");
         entity.setBibliothek(dto.getBibliothek());

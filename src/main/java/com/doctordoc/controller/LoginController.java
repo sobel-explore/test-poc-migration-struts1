@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Controller for authentication operations.
@@ -24,6 +25,13 @@ import java.util.List;
 public class LoginController {
 
     private static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
+
+    /**
+     * Allowed relative paths for welcomePage redirect (Open Redirect protection).
+     */
+    private static final Set<String> ALLOWED_WELCOME_PATHS = Set.of(
+            "/uebersicht", "/searchfree", "/services", "/login"
+    );
 
     private final DoctorDocProperties properties;
     private final KontoService kontoService;
@@ -39,10 +47,31 @@ public class LoginController {
 
     @GetMapping("/")
     public String home() {
-        if (properties.getWelcomePage() != null && !properties.getWelcomePage().isEmpty()) {
-            return "redirect:" + properties.getWelcomePage();
+        String welcomePage = properties.getWelcomePage();
+        // Validate welcomePage to prevent Open Redirect attacks
+        if (welcomePage != null && !welcomePage.isEmpty() && isValidWelcomePath(welcomePage)) {
+            return "redirect:" + welcomePage;
         }
         return "redirect:/login";
+    }
+
+    /**
+     * Validates that the welcome path is safe (relative URL starting with /).
+     * Prevents Open Redirect vulnerability from malicious configuration.
+     */
+    private boolean isValidWelcomePath(String path) {
+        if (path == null || path.isEmpty()) {
+            return false;
+        }
+        // Must start with / and not contain protocol or double slashes
+        if (!path.startsWith("/") || path.startsWith("//") || path.contains("://")) {
+            LOG.warn("Invalid welcome page configured: {}", path);
+            return false;
+        }
+        // Extract path without query string for validation
+        String basePath = path.contains("?") ? path.substring(0, path.indexOf("?")) : path;
+        // Check against allowed paths
+        return ALLOWED_WELCOME_PATHS.contains(basePath);
     }
 
     @GetMapping("/login")

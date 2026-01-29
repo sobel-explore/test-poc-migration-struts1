@@ -91,6 +91,19 @@ public class SecurityConfig {
             )
             .exceptionHandling(ex -> ex
                 .accessDeniedPage("/error/403")
+            )
+            // Security headers
+            .headers(headers -> headers
+                .frameOptions(frame -> frame.sameOrigin()) // Prevent clickjacking
+                .contentTypeOptions(content -> {}) // X-Content-Type-Options: nosniff
+                .xssProtection(xss -> xss.disable()) // Deprecated, CSP is preferred
+                .httpStrictTransportSecurity(hsts -> hsts
+                    .includeSubDomains(true)
+                    .maxAgeInSeconds(31536000) // 1 year
+                )
+                .contentSecurityPolicy(csp -> csp
+                    .policyDirectives("default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self';")
+                )
             );
 
         return http.build();

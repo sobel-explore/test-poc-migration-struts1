@@ -25,6 +25,10 @@ import org.springframework.web.bind.annotation.*;
 public class OverviewController {
 
     private static final Logger LOG = LoggerFactory.getLogger(OverviewController.class);
+    private static final String MENU_OVERVIEW = "uebersicht";
+    private static final String MENU_SEARCH_ORDER = "suchenbestellen";
+    private static final int DEFAULT_PAGE_SIZE = 20;
+    private static final String DEFAULT_SORT_FIELD = "orderdate";
 
     private final OrderService orderService;
     private final DoctorDocProperties properties;
@@ -39,7 +43,7 @@ public class OverviewController {
                            @RequestParam(name = "filter", defaultValue = "") String filter,
                            @RequestParam(defaultValue = "") String search,
                            @RequestParam(defaultValue = "0") int page,
-                           @RequestParam(defaultValue = "20") int size,
+                           @RequestParam(defaultValue = "20") int size, // DEFAULT_PAGE_SIZE
                            Model model) {
 
         if (userDetails == null) {
@@ -60,7 +64,7 @@ public class OverviewController {
             size = properties.getMaxResultsDisplay();
         }
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "orderdate"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, DEFAULT_SORT_FIELD));
 
         Page<Bestellungen> orders;
         if (!search.isEmpty()) {
@@ -80,7 +84,7 @@ public class OverviewController {
         model.addAttribute("konto", konto);
         model.addAttribute("user", userDetails.getBenutzer());
         model.addAttribute("isLibrarian", userDetails.isLibrarian() || userDetails.isAdmin());
-        model.addAttribute("activeMenu", "uebersicht");
+        model.addAttribute("activeMenu", MENU_OVERVIEW);
 
         return "order/overview";
     }
@@ -112,7 +116,7 @@ public class OverviewController {
                     model.addAttribute("konto", konto);
                     model.addAttribute("user", userDetails.getBenutzer());
                     model.addAttribute("isLibrarian", userDetails.isLibrarian() || userDetails.isAdmin());
-                    model.addAttribute("activeMenu", "suchenbestellen");
+                    model.addAttribute("activeMenu", MENU_SEARCH_ORDER);
 
                     return "order/detail";
                 })

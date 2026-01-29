@@ -26,6 +26,7 @@ import java.util.List;
 public class KontoController {
 
     private static final Logger LOG = LoggerFactory.getLogger(KontoController.class);
+    private static final String MENU_ACCOUNT_MGMT = "kontoverwaltung";
 
     private final KontoService kontoService;
 
@@ -38,7 +39,7 @@ public class KontoController {
     public String listKontos(Model model) {
         List<Konto> kontos = kontoService.findAll();
         model.addAttribute("kontos", kontos);
-        model.addAttribute("activeMenu", "kontoverwaltung");
+        model.addAttribute("activeMenu", "MENU_ACCOUNT_MGMT");
         return "konto/list";
     }
 
@@ -54,7 +55,7 @@ public class KontoController {
         model.addAttribute("konto", konto);
         model.addAttribute("user", userDetails.getBenutzer());
         model.addAttribute("isLibrarian", userDetails.isLibrarian() || userDetails.isAdmin());
-        model.addAttribute("activeMenu", "kontoverwaltung");
+        model.addAttribute("activeMenu", "MENU_ACCOUNT_MGMT");
 
         return "konto/view";
     }
@@ -74,7 +75,7 @@ public class KontoController {
 
         model.addAttribute("kontoDto", kontoDto);
         model.addAttribute("konto", konto);
-        model.addAttribute("activeMenu", "kontoverwaltung");
+        model.addAttribute("activeMenu", "MENU_ACCOUNT_MGMT");
 
         return "konto/form";
     }
@@ -94,7 +95,7 @@ public class KontoController {
 
         if (result.hasErrors()) {
             model.addAttribute("konto", konto);
-            model.addAttribute("activeMenu", "kontoverwaltung");
+            model.addAttribute("activeMenu", "MENU_ACCOUNT_MGMT");
             return "konto/form";
         }
 
@@ -117,7 +118,7 @@ public class KontoController {
     @PreAuthorize("hasRole('ADMIN')")
     public String addKontoForm(Model model) {
         model.addAttribute("kontoDto", new KontoDto());
-        model.addAttribute("activeMenu", "kontoverwaltung");
+        model.addAttribute("activeMenu", "MENU_ACCOUNT_MGMT");
         return "konto/form";
     }
 
@@ -130,7 +131,7 @@ public class KontoController {
                            RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            model.addAttribute("activeMenu", "kontoverwaltung");
+            model.addAttribute("activeMenu", "MENU_ACCOUNT_MGMT");
             return "konto/form";
         }
 

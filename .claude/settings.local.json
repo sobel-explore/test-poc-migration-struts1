@@ -36,7 +36,10 @@
       "Bash(JAVA_HOME=/c/dev/tools/jdk/jdk-17 PATH=\"/c/dev/tools/maven/maven-3.9.11/bin:$PATH\" mvn clean package:*)",
       "Bash(echo:*)",
       "Bash(env)",
-      "Bash(powershell.exe -Command \"cd ''C:\\\\dev\\\\projects\\\\poc-migration-strut-spring\\\\doctor-doc-struts1''; mvn clean package -DskipTests\")"
+      "Bash(powershell.exe -Command \"cd ''C:\\\\dev\\\\projects\\\\poc-migration-strut-spring\\\\doctor-doc-struts1''; mvn clean package -DskipTests\")",
+      "Bash(powershell -Command \"mvn compile -q 2>&1 | Select-Object -First 50\")",
+      "Bash(powershell -Command \"mvn clean package -DskipTests -q 2>&1 | Select-Object -Last 30\")",
+      "Bash(powershell -Command:*)"
     ]
   }
 }
